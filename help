@@ -42,4 +42,4 @@ CREATE TABLE applications (
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
     FOREIGN KEY (applicant_id) REFERENCES users(user_id) ON DELETE CASCADE
-);
+); 

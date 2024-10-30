@@ -1,13 +1,12 @@
 import { useState } from 'react'
-
+import { Button } from './components/ui/button'
+import {PopoverDemo} from './_compo/PopOver'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <h1 className='mt-10 text-3xl'> Hi</h1>
-    </>
+    <PopoverDemo />
   )
 }
 

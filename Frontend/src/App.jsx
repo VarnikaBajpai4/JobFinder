@@ -1,11 +1,13 @@
-import { useState } from 'react'
+// src/App.jsx
+import React from 'react';
+import HomePage from './pages/HomePage';
 
-function App() {
+const App = () => {
+    return (
+        <div>
+            <HomePage />
+        </div>
+    );
+};
 
-  return (
-    <>
-    </>
-  );
-}
-
-export default App
+export default App;

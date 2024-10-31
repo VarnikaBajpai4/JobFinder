@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import axios from 'axios';
 
 const SignupModal = ({ open, onClose }) => {
   const [name, setName] = useState('');
@@ -7,14 +8,32 @@ const SignupModal = ({ open, onClose }) => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
 
-  const handleSignup = () => {
-    // Simulate signup logic, such as password hashing and API call
-    console.log('Signup is successful, you can login now');
-    // Additional signup logic would go here, like sending data to the backend
-
-    // Close the modal after successful signup
-    onClose();
+  const handleSignup = async () => {
+    const data = {
+      action: 'signup',
+      name,
+      email,
+      password,
+      role,
+    };
+    
+    console.log('Sending data:', data);  //Debugging output
+  
+    try {
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', data, { withCredentials: true });
+      console.log(response.data);
+      if (response.data.success) {
+        alert(response.data.message);
+        onClose();
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error('Error signing up:', error);
+      alert('An error occurred during signup.');
+    }
   };
+  
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -45,8 +64,8 @@ const SignupModal = ({ open, onClose }) => {
         <FormControl fullWidth margin="normal">
           <InputLabel>Role</InputLabel>
           <Select value={role} onChange={(e) => setRole(e.target.value)}>
-            <MenuItem value="Job Seeker">Job Seeker</MenuItem>
-            <MenuItem value="Employer">Employer</MenuItem>
+            <MenuItem value="job_seeker">Job Seeker</MenuItem>
+            <MenuItem value="employer">Employer</MenuItem>
           </Select>
         </FormControl>
         <Button variant="contained" onClick={handleSignup} fullWidth sx={{ mt: 2 }}>

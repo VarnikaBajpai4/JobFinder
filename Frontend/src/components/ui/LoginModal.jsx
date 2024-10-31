@@ -1,12 +1,34 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
 
-  const handleLogin = () => {
-    // Handle login logic
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        'http://localhost/JobFinder/Backend/public/api.php',
+        {
+          action: 'login',
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        setLoginMessage('Login successful!');
+        // Perform any additional logic, like setting auth state, etc.
+      } else {
+        setLoginMessage(response.data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginMessage('An error occurred while logging in.');
+    }
   };
 
   return (
@@ -31,6 +53,7 @@ const LoginModal = ({ open, onClose }) => {
         <Button variant="contained" onClick={handleLogin} fullWidth sx={{ mt: 2 }}>
           Login
         </Button>
+        {loginMessage && <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>{loginMessage}</Typography>}
       </Box>
     </Modal>
   );

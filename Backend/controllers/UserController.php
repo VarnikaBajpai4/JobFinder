@@ -12,18 +12,20 @@ class UserController {
     }
 
     public function signup($data) {
-        $name = $data['name'];
+        $username = $data['name']; // Keeping $username to match database field
         $email = $data['email'];
         $password = password_hash($data['password'], PASSWORD_BCRYPT);
         $role = $data['role'];
-
-        $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
-        if ($stmt->execute([$name, $email, $password, $role])) {
+    
+        // Update the SQL query to use `username`
+        $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+        if ($stmt->execute([$username, $email, $password, $role])) {
             return ['success' => true, 'message' => 'Signup successful'];
         } else {
             return ['success' => false, 'message' => 'Signup failed'];
         }
     }
+    
 
     public function login($data) {
         $email = $data['email'];

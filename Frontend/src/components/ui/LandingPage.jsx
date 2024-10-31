@@ -143,41 +143,14 @@ const LandingPage = () => {
                   <Typography variant="body2" color="textSecondary" mt={1}>
                     ⭐ 4.5 | 10k+ reviews
                   </Typography>
-                  <Button variant="outlined" sx={{ mt: 2 }}>
-                    View Jobs
-                  </Button>
+                  
                 </Box>
               </Grid>
             ))}
           </Grid>
         </Box>
 
-        {/* Popular Job Roles Section */}
-        <Box mb={8}>
-          <Typography variant="h4" fontWeight="bold" mb={2}>
-            Discover jobs across popular roles
-          </Typography>
-          <Grid container spacing={3}>
-            {/* Sample cards */}
-            {['Full Stack Developer', 'Front End Developer', 'DevOps Engineer', 'Technical Lead'].map((role) => (
-              <Grid item xs={12} sm={6} md={3} key={role}>
-                <Box
-                  sx={{
-                    p: 3,
-                    border: '1px solid #e0e0e0',
-                    borderRadius: 2,
-                    textAlign: 'center',
-                  }}
-                >
-                  <Typography variant="h6" fontWeight="bold">
-                    {role}
-                  </Typography>
-                  <Typography color="textSecondary">10k+ Jobs</Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
+        
       </Container>
 
       {/* Modals */}

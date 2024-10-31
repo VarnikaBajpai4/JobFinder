@@ -36,7 +36,7 @@ class UserController {
         if ($user && password_verify($password, $user['password'])) {
             session_start();
             $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['role'] = $user['role']; // Store the user's role in session
+            $_SESSION['role'] = $user['role']; 
             return ['success' => true, 'message' => 'Login successful'];
         } else {
             return ['success' => false, 'message' => 'Invalid email or password'];

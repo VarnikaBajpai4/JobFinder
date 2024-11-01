@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Paper, Stack } from '@mui/material';
 
 const EmployerDetails = () => {
@@ -17,9 +19,38 @@ const EmployerDetails = () => {
     setCompanyLogo(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send data to the backend
+  
+    const formData = new FormData();
+    formData.append('action', 'saveEmployerDetails');
+    formData.append('companyLogo', companyLogo);
+    formData.append('companyName', companyName);
+    formData.append('description', description);
+    formData.append('industry', industry);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('website', website);
+    formData.append('experienceLevel', experienceLevel);
+    formData.append('workArrangement', workArrangement);
+  
+    try {
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,
+      });
+      console.log(response.data);
+      if (response.data.success) {
+        alert('Employer details saved successfully');
+      } else {
+        alert('Failed to save employer details');
+      }
+    } catch (error) {
+      console.error('Error submitting employer details:', error);
+      alert('An error occurred while submitting employer details.');
+    }
   };
 
   return (

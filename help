@@ -7,38 +7,32 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE profiles (
-    profile_id INT PRIMARY KEY AUTO_INCREMENT,
+
+CREATE TABLE job_seekers (
+    job_seeker_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
-    bio TEXT,
+    profile_picture VARCHAR(255),
     resume VARCHAR(255),
-    company_name VARCHAR(100),
+    job_type ENUM('full-time', 'part-time', 'freelance'),
     location VARCHAR(100),
-    website VARCHAR(255),
+    industry VARCHAR(100),
+    skills JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE jobs (
-    job_id INT PRIMARY KEY AUTO_INCREMENT,
-    employer_id INT NOT NULL,
-    title VARCHAR(100) NOT NULL,
-    description TEXT NOT NULL,
-    requirements TEXT,
-    location VARCHAR(100),
-    job_type ENUM('full-time', 'part-time', 'contract', 'internship'),
-    salary_range VARCHAR(50),
+CREATE TABLE employers (
+    employer_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    company_logo VARCHAR(255),
+    company_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    industry VARCHAR(100),
+    phone VARCHAR(15),
+    email VARCHAR(100),
+    website VARCHAR(255),
+    experience_level ENUM('entry-level', 'mid-level', 'senior'),
+    work_arrangement ENUM('remote', 'on-site', 'hybrid'),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (employer_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
-
-CREATE TABLE applications (
-    application_id INT PRIMARY KEY AUTO_INCREMENT,
-    job_id INT NOT NULL,
-    applicant_id INT NOT NULL,
-    status ENUM('pending', 'reviewed', 'accepted', 'rejected') DEFAULT 'pending',
-    cover_letter TEXT,
-    resume VARCHAR(255),
-    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
-    FOREIGN KEY (applicant_id) REFERENCES users(user_id) ON DELETE CASCADE
-); 

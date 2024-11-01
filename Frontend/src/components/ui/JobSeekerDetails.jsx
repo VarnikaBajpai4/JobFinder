@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
 
 const JobSeekerDetails = () => {
@@ -26,10 +28,31 @@ const JobSeekerDetails = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send data to the backend
+
+    // Using FormData to include files in the request
+    const formData = new FormData();
+    formData.append('action', 'job_seeker_details'); // Ensure this is set correctly
+    formData.append('profile_picture', profilePicture);
+    formData.append('resume', resume);
+    formData.append('job_type', jobType);
+    formData.append('location', location);
+    formData.append('industry', industry);
+    formData.append('skills', skills);
+
+    try {
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+      alert(response.data.message);
+    } catch (error) {
+      console.error('Error submitting job seeker details:', error);
+      alert('An error occurred while submitting the form.');
+    }
   };
+
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
@@ -40,7 +63,7 @@ const JobSeekerDetails = () => {
         <form onSubmit={handleSubmit}>
           <Stack spacing={3}>
             <FormControl>
-              
+
               <Button variant="outlined" component="label">
                 Upload Profile Picture
                 <input type="file" hidden onChange={handleProfilePictureChange} />
@@ -49,7 +72,7 @@ const JobSeekerDetails = () => {
             </FormControl>
 
             <FormControl>
-              
+
               <Button variant="outlined" component="label">
                 Upload Resume
                 <input type="file" hidden onChange={handleResumeChange} />

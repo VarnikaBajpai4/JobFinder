@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
 
 const JobSeekerDetails = () => {
   const [profilePicture, setProfilePicture] = useState(null);
@@ -31,57 +32,87 @@ const JobSeekerDetails = () => {
   };
 
   return (
-    <div>
-      <h2>Job Seeker Details</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Profile Picture:
-          <input type="file" onChange={handleProfilePictureChange} />
-        </label>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
+      <Paper elevation={3} sx={{ p: 4, maxWidth: 600, width: '100%', borderRadius: 3 }}>
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Job Seeker Details
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <FormControl>
+              <InputLabel shrink>Profile Picture</InputLabel>
+              <Button variant="outlined" component="label">
+                Upload Profile Picture
+                <input type="file" hidden onChange={handleProfilePictureChange} />
+              </Button>
+              {profilePicture && <Typography variant="caption">{profilePicture.name}</Typography>}
+            </FormControl>
 
-        <label>
-          Resume:
-          <input type="file" onChange={handleResumeChange} />
-        </label>
+            <FormControl>
+              <InputLabel shrink>Resume</InputLabel>
+              <Button variant="outlined" component="label">
+                Upload Resume
+                <input type="file" hidden onChange={handleResumeChange} />
+              </Button>
+              {resume && <Typography variant="caption">{resume.name}</Typography>}
+            </FormControl>
 
-        <label>
-          Job Type:
-          <select value={jobType} onChange={(e) => setJobType(e.target.value)}>
-            <option value="">Select Job Type</option>
-            <option value="full-time">Full-time</option>
-            <option value="part-time">Part-time</option>
-            <option value="freelance">Freelance</option>
-          </select>
-        </label>
+            <FormControl fullWidth>
+              <InputLabel>Job Type</InputLabel>
+              <Select
+                value={jobType}
+                onChange={(e) => setJobType(e.target.value)}
+                label="Job Type"
+              >
+                <MenuItem value="full-time">Full-time</MenuItem>
+                <MenuItem value="part-time">Part-time</MenuItem>
+                <MenuItem value="freelance">Freelance</MenuItem>
+              </Select>
+            </FormControl>
 
-        <label>
-          Location:
-          <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-        </label>
+            <TextField
+              label="Location"
+              fullWidth
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
 
-        <label>
-          Industry:
-          <input type="text" value={industry} onChange={(e) => setIndustry(e.target.value)} />
-        </label>
+            <TextField
+              label="Industry"
+              fullWidth
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+            />
 
-        <fieldset>
-          <legend>Skills</legend>
-          {skillOptions.map((skill) => (
-            <label key={skill}>
-              <input
-                type="checkbox"
-                value={skill}
-                checked={skills.includes(skill)}
-                onChange={handleSkillChange}
-              />
-              {skill}
-            </label>
-          ))}
-        </fieldset>
+            <Box>
+              <Typography variant="body1" fontWeight="bold" gutterBottom>
+                Skills
+              </Typography>
+              <Grid container spacing={1}>
+                {skillOptions.map((skill) => (
+                  <Grid item xs={6} sm={4} key={skill}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={skills.includes(skill)}
+                          onChange={handleSkillChange}
+                          value={skill}
+                        />
+                      }
+                      label={skill}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+            <Button variant="contained" type="submit" fullWidth>
+              Submit
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 

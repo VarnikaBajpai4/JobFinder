@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Paper, Stack } from '@mui/material';
 
 const EmployerDetails = () => {
   const [companyLogo, setCompanyLogo] = useState(null);
@@ -21,67 +22,102 @@ const EmployerDetails = () => {
   };
 
   return (
-    <div>
-      <h2>Employer Details</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Company Logo:
-          <input type="file" onChange={handleCompanyLogoChange} />
-        </label>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
+      <Paper elevation={3} sx={{ p: 4, maxWidth: 600, width: '100%', borderRadius: 3 }}>
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Employer Details
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={3}>
+            <FormControl>
+              <InputLabel shrink>Company Logo</InputLabel>
+              <Button variant="outlined" component="label">
+                Upload Company Logo
+                <input type="file" hidden onChange={handleCompanyLogoChange} />
+              </Button>
+              {companyLogo && <Typography variant="caption">{companyLogo.name}</Typography>}
+            </FormControl>
 
-        <label>
-          Company Name:
-          <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
-        </label>
+            <TextField
+              label="Company Name"
+              fullWidth
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+            />
 
-        <label>
-          Description:
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-        </label>
+            <TextField
+              label="Description"
+              fullWidth
+              multiline
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
 
-        <label>
-          Industry:
-          <input type="text" value={industry} onChange={(e) => setIndustry(e.target.value)} />
-        </label>
+            <TextField
+              label="Industry"
+              fullWidth
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+            />
 
-        <label>
-          Phone:
-          <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        </label>
+            <TextField
+              label="Phone"
+              fullWidth
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
 
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
+            <TextField
+              label="Email"
+              fullWidth
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <label>
-          Website:
-          <input type="url" value={website} onChange={(e) => setWebsite(e.target.value)} />
-        </label>
+            <TextField
+              label="Website"
+              fullWidth
+              type="url"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
 
-        <label>
-          Preferred Experience Level:
-          <select value={experienceLevel} onChange={(e) => setExperienceLevel(e.target.value)}>
-            <option value="">Select Experience Level</option>
-            <option value="entry-level">Entry-level</option>
-            <option value="mid-level">Mid-level</option>
-            <option value="senior">Senior</option>
-          </select>
-        </label>
+            <FormControl fullWidth>
+              <InputLabel>Preferred Experience Level</InputLabel>
+              <Select
+                value={experienceLevel}
+                onChange={(e) => setExperienceLevel(e.target.value)}
+                label="Preferred Experience Level"
+              >
+                <MenuItem value="entry-level">Entry-level</MenuItem>
+                <MenuItem value="mid-level">Mid-level</MenuItem>
+                <MenuItem value="senior">Senior</MenuItem>
+              </Select>
+            </FormControl>
 
-        <label>
-          Work Arrangement:
-          <select value={workArrangement} onChange={(e) => setWorkArrangement(e.target.value)}>
-            <option value="">Select Work Arrangement</option>
-            <option value="remote">Remote</option>
-            <option value="on-site">On-site</option>
-            <option value="hybrid">Hybrid</option>
-          </select>
-        </label>
+            <FormControl fullWidth>
+              <InputLabel>Work Arrangement</InputLabel>
+              <Select
+                value={workArrangement}
+                onChange={(e) => setWorkArrangement(e.target.value)}
+                label="Work Arrangement"
+              >
+                <MenuItem value="remote">Remote</MenuItem>
+                <MenuItem value="on-site">On-site</MenuItem>
+                <MenuItem value="hybrid">Hybrid</MenuItem>
+              </Select>
+            </FormControl>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+            <Button variant="contained" type="submit" fullWidth>
+              Submit
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 

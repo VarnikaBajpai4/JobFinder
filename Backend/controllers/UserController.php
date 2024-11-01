@@ -30,16 +30,19 @@ class UserController {
     public function login($data) {
         $email = $data['email'];
         $password = $data['password'];
+        
+
 
         $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
+        $role=$user['role'];
 
         if ($user && password_verify($password, $user['password'])) {
             session_start();
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role']; 
-            return ['success' => true, 'message' => 'Login successful'];
+            return ['success' => true, 'message' => 'Login successful','role' => $role];
         } else {
             return ['success' => false, 'message' => 'Invalid email or password'];
         }

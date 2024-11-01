@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const LoginModal = ({ open, onClose }) => {
@@ -23,10 +24,11 @@ const LoginModal = ({ open, onClose }) => {
 
       if (response.data.success) {
         setLoginMessage('Login successful!');
+        console.log('User Role:', response.data.role);
         
         // Redirect based on role
         const userRole = response.data.role;
-        if (userRole === 'jobSeeker') {
+        if (userRole === 'job_seeker') {
           navigate('/job-seeker-details');
         } else if (userRole === 'employer') {
           navigate('/employer-details');

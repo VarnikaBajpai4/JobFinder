@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleLogin = async () => {
     try {
@@ -21,7 +23,14 @@ const LoginModal = ({ open, onClose }) => {
 
       if (response.data.success) {
         setLoginMessage('Login successful!');
-        // Perform any additional logic, like setting auth state, etc.
+        
+        // Redirect based on role
+        const userRole = response.data.role;
+        if (userRole === 'jobSeeker') {
+          navigate('/job-seeker-details');
+        } else if (userRole === 'employer') {
+          navigate('/employer-details');
+        }
       } else {
         setLoginMessage(response.data.message || 'Login failed');
       }

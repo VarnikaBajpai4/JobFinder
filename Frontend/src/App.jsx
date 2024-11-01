@@ -1,13 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './components/ui/LandingPage';
-import { CssBaseline } from '@mui/material';
+import JobSeekerDetails from './components/ui/JobSeekerDetails';
+import EmployerDetails from './components/ui/EmployerDetails';
 
 function App() {
   return (
-    <>
-      <CssBaseline />
-      <LandingPage />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/job-seeker-details" element={<JobSeekerDetails />} />
+        <Route path="/employer-details" element={<EmployerDetails />} />
+      </Routes>
+    </Router>
   );
 }
 

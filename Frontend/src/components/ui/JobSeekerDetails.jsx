@@ -9,7 +9,7 @@ const JobSeekerDetails = () => {
   const [industry, setIndustry] = useState('');
   const [skills, setSkills] = useState([]);
 
-  const skillOptions = ['JavaScript', 'Python', 'Project Management', 'React', 'Node.js', 'SQL'];
+  const skillOptions = ['JavaScript', 'Python', 'Project Management', 'React', 'Node.js', 'Other'];
 
   const handleProfilePictureChange = (e) => {
     setProfilePicture(e.target.files[0]);
@@ -40,7 +40,7 @@ const JobSeekerDetails = () => {
         <form onSubmit={handleSubmit}>
           <Stack spacing={3}>
             <FormControl>
-              <InputLabel shrink>Profile Picture</InputLabel>
+              
               <Button variant="outlined" component="label">
                 Upload Profile Picture
                 <input type="file" hidden onChange={handleProfilePictureChange} />
@@ -49,7 +49,7 @@ const JobSeekerDetails = () => {
             </FormControl>
 
             <FormControl>
-              <InputLabel shrink>Resume</InputLabel>
+              
               <Button variant="outlined" component="label">
                 Upload Resume
                 <input type="file" hidden onChange={handleResumeChange} />

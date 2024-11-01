@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, 
 
 const EmployerDetails = () => {
   const [companyLogo, setCompanyLogo] = useState(null);
+  const [jobTitle, setJobTitle] = useState(''); // New field for Job Title
   const [companyName, setCompanyName] = useState('');
   const [description, setDescription] = useState('');
   const [industry, setIndustry] = useState('');
@@ -29,14 +30,21 @@ const EmployerDetails = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <Stack spacing={3}>
-            <FormControl>
-              <InputLabel shrink>Company Logo</InputLabel>
-              <Button variant="outlined" component="label">
-                Upload Company Logo
-                <input type="file" hidden onChange={handleCompanyLogoChange} />
-              </Button>
-              {companyLogo && <Typography variant="caption">{companyLogo.name}</Typography>}
-            </FormControl>
+            {/* Updated Company Logo field without FormControl */}
+          
+            <Button variant="outlined" component="label">
+              Upload Company Logo
+              <input type="file" hidden onChange={handleCompanyLogoChange} />
+            </Button>
+            {companyLogo && <Typography variant="caption">{companyLogo.name}</Typography>}
+
+            {/* Job Title Field */}
+            <TextField
+              label="Job Title"
+              fullWidth
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
+            />
 
             <TextField
               label="Company Name"

@@ -20,7 +20,7 @@ class UserController {
         // Update the SQL query to use `username`
         $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
         if ($stmt->execute([$username, $email, $password, $role])) {
-            return ['success' => true, 'message' => 'Signup successful'];
+            return ['success' => true, 'message' => 'Signup successful', 'role' => $role];
         } else {
             return ['success' => false, 'message' => 'Signup failed'];
         }

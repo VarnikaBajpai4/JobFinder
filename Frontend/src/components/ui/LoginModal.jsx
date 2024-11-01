@@ -26,7 +26,7 @@ const LoginModal = ({ open, onClose }) => {
         
         // Redirect based on role
         const userRole = response.data.role;
-        if (userRole === 'jobSeeker') {
+        if (userRole === 'job_seeker') {
           navigate('/job-seeker-details');
         } else if (userRole === 'employer') {
           navigate('/employer-details');

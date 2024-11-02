@@ -1,13 +1,23 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
-import useAuthCheck from '../../hooks/useAuthCheck';
+import useJobSeekerAuthCheck from '../../hooks/useJobSeekerAuthCheck';
+
+
 
 const JobSeekerDetails = () => {
-  const checkAuth = useAuthCheck();
+  const checkAuth = useJobSeekerAuthCheck();
 
   useEffect(() => {
-    checkAuth();
+    const authenticateUser = async () => {
+      const user = await checkAuth(); 
+      if (!user) {
+        console.log('User not authenticated. Redirecting to landing page...');
+        return;
+      }
+    };
+
+    authenticateUser(); 
   }, [checkAuth]);
 
   const [fullName, setFullName] = useState('');

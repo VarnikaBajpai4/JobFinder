@@ -102,6 +102,7 @@ class UserController
 
         if ($user && password_verify($password, $user['password'])) {
             session_start();
+            //error_log("user id of login: " . print_r($_SESSION['user_id'], true));
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role'];
             return ['success' => true, 'message' => 'Login successful', 'role' => $user['role']];

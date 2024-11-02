@@ -1,15 +1,22 @@
 import React, { useState,useEffect} from 'react';
 import axios from 'axios';
-import useAuthCheck from '../../hooks/useAuthCheck';
-
+import useEmployerAuthCheck from '../../hooks/useEmployerAuthCheck';
 
 import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Paper, Stack } from '@mui/material';
 
 const EmployerDetails = () => {
-  const checkAuth = useAuthCheck();
+  const checkAuth = useEmployerAuthCheck();
 
   useEffect(() => {
-    checkAuth();
+    const authenticateUser = async () => {
+      const user = await checkAuth(); 
+      if (!user) {
+        console.log('User not authenticated. Redirecting to landing page...');
+        return;
+      }
+    };
+
+    authenticateUser(); 
   }, [checkAuth]);
 
   const [companyName, setCompanyName] = useState('');

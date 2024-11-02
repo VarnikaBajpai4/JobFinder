@@ -65,19 +65,24 @@ class UserController
     }
 
 
-    
     private function handleFileUpload($file, $folder)
-    {   
+    {
         $targetDir = __DIR__ . '/../uploads/' . $folder . '/';
-
+        if (!is_dir($targetDir) || !is_writable($targetDir)) {
+            return ['success' => false, 'message' => 'Target directory is not writable or does not exist.'];
+        }
 
         $targetFile = $targetDir . basename($file["name"]);
-        if (move_uploaded_file($file["tmp_name"], $targetFile)) {
 
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return ['success' => false, 'message' => 'File upload error: ' . $file['error']];
+        }
+
+        if (move_uploaded_file($file["tmp_name"], $targetFile)) {
             return $targetFile;
         }
 
-        return false;
+        return ['success' => false, 'message' => 'Failed to move uploaded file.'];
     }
 
 

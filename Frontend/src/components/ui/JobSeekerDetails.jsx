@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-
-import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
+import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
+import useAuthCheck from '../../hooks/useAuthCheck';
 
 const JobSeekerDetails = () => {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [resume, setResume] = useState(null);
-  const [jobType, setJobType] = useState('');
+  const checkAuth = useAuthCheck();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  const [fullName, setFullName] = useState('');
   const [location, setLocation] = useState('');
-  const [industry, setIndustry] = useState('');
   const [skills, setSkills] = useState([]);
+  const [resume, setResume] = useState(null);
 
-  const skillOptions = ['JavaScript', 'Python', 'Project Management', 'React', 'Node.js', 'Other'];
-
-  const handleProfilePictureChange = (e) => {
-    setProfilePicture(e.target.files[0]);
-  };
+  const skillOptions = ['JavaScript', 'Python', 'React', 'Node.js', 'Other'];
 
   const handleResumeChange = (e) => {
     setResume(e.target.files[0]);
@@ -31,21 +31,19 @@ const JobSeekerDetails = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Using FormData to include files in the request
     const formData = new FormData();
-    formData.append('action', 'job_seeker_details'); // Ensure this is set correctly
-    formData.append('profile_picture', profilePicture);
-    formData.append('resume', resume);
-    formData.append('job_type', jobType);
+    formData.append('action', 'job_seeker_details'); // This is still correct
+    formData.append('full_name', fullName);
     formData.append('location', location);
-    formData.append('industry', industry);
-    formData.append('skills', skills);
+    formData.append('skills', JSON.stringify(skills)); // Convert skills array to JSON
+    formData.append('resume', resume);
 
     try {
       const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });
+
       alert(response.data.message);
     } catch (error) {
       console.error('Error submitting job seeker details:', error);
@@ -62,49 +60,18 @@ const JobSeekerDetails = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <Stack spacing={3}>
-            <FormControl>
-
-              <Button variant="outlined" component="label">
-                Upload Profile Picture
-                <input type="file" hidden onChange={handleProfilePictureChange} />
-              </Button>
-              {profilePicture && <Typography variant="caption">{profilePicture.name}</Typography>}
-            </FormControl>
-
-            <FormControl>
-
-              <Button variant="outlined" component="label">
-                Upload Resume
-                <input type="file" hidden onChange={handleResumeChange} />
-              </Button>
-              {resume && <Typography variant="caption">{resume.name}</Typography>}
-            </FormControl>
-
-            <FormControl fullWidth>
-              <InputLabel>Job Type</InputLabel>
-              <Select
-                value={jobType}
-                onChange={(e) => setJobType(e.target.value)}
-                label="Job Type"
-              >
-                <MenuItem value="full-time">Full-time</MenuItem>
-                <MenuItem value="part-time">Part-time</MenuItem>
-                <MenuItem value="freelance">Freelance</MenuItem>
-              </Select>
-            </FormControl>
-
             <TextField
-              label="Location"
+              label="Full Name"
               fullWidth
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
 
             <TextField
-              label="Industry"
+              label="Location (e.g., City, State)"
               fullWidth
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
             />
 
             <Box>
@@ -128,6 +95,14 @@ const JobSeekerDetails = () => {
                 ))}
               </Grid>
             </Box>
+
+            <FormControl>
+              <Button variant="outlined" component="label">
+                Upload Resume
+                <input type="file" hidden onChange={handleResumeChange} />
+              </Button>
+              {resume && <Typography variant="caption">{resume.name}</Typography>}
+            </FormControl>
 
             <Button variant="contained" type="submit" fullWidth>
               Submit

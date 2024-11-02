@@ -13,28 +13,16 @@ class UserController
         $this->conn = $database->connect();
     }
 
-    public function jobSeekerDetails($data)
+    public function jobSeekerDetails($data, $files)
     {
-        // Check if required fields are set
-        if (empty($data['job_type']) || empty($data['location']) || empty($data['industry']) || empty($data['skills'])) {
+        // Check required fields
+        if (empty($data['full_name']) || empty($data['location']) || empty($data['skills'])) {
             return ['success' => false, 'message' => 'All fields are required.'];
         }
 
-        // Handling file uploads
-        $profilePicture = $_FILES['profile_picture'] ?? null;
-        $resume = $_FILES['resume'] ?? null;
-
-        // Validate and process the uploaded files
-        if ($profilePicture && $profilePicture['error'] == 0) {
-            $profilePicturePath = $this->handleFileUpload($profilePicture, 'profile_pictures');
-            if (!$profilePicturePath) {
-                return ['success' => false, 'message' => 'Failed to upload profile picture.'];
-            }
-        } else {
-            return ['success' => false, 'message' => 'Profile picture is required.'];
-        }
-
-        if ($resume && $resume['error'] == 0) {
+        // Handle resume upload
+        $resume = $files['resume'] ?? null;
+        if ($resume && $resume['error'] === 0) {
             $resumePath = $this->handleFileUpload($resume, 'resumes');
             if (!$resumePath) {
                 return ['success' => false, 'message' => 'Failed to upload resume.'];
@@ -43,70 +31,46 @@ class UserController
             return ['success' => false, 'message' => 'Resume is required.'];
         }
 
-        // Convert the skills string to a JSON array
-        $skillsArray = array_map('trim', explode(',', $data['skills'])); // Split by comma and trim spaces
-        $skillsJson = json_encode($skillsArray); // Convert to JSON
+        // Convert skills to JSON
+        $skillsArray = array_map('trim', explode(',', $data['skills']));
+        $skillsJson = json_encode($skillsArray);
 
-        // Retrieve the user_id from the session or input data
-        session_start(); // Start the session if it's not already started
-        $userId = $_SESSION['user_id'] ?? null; // Assuming the user ID is stored in the session
-
+        // Get user_id from session
+        session_start();
+        $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
             return ['success' => false, 'message' => 'User not authenticated.'];
         }
 
-        // Save to the database
-        if ($this->saveJobSeekerDetails($data, $profilePicturePath, $resumePath, $skillsJson, $userId)) {
+        // Save job seeker details
+        if ($this->saveJobSeekerDetails($data, $resumePath, $skillsJson, $userId)) {
             return ['success' => true, 'message' => 'Job seeker details saved successfully.'];
         } else {
             return ['success' => false, 'message' => 'Failed to save job seeker details.'];
         }
     }
 
-    private function saveJobSeekerDetails($data, $profilePicturePath, $resumePath, $skillsJson, $userId)
+    private function saveJobSeekerDetails($data, $resumePath, $skillsJson, $userId)
     {
-        $stmt = $this->conn->prepare("INSERT INTO job_seekers (user_id, job_type, location, industry, skills, profile_picture, resume) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO job_seekers (user_id, full_name, location, skills, resume) VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([
-            $userId, // Include the user_id in the insert statement
-            $data['job_type'],
+            $userId,
+            $data['full_name'],
             $data['location'],
-            $data['industry'],
-            $skillsJson, // Use the JSON formatted skills
-            $profilePicturePath,
+            $skillsJson,
             $resumePath
         ]);
     }
 
     private function handleFileUpload($file, $folder)
     {
-        // Validate file upload
-        if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            // Define target directory
-            $targetDir = __DIR__ . '/../uploads/' . $folder . '/';
-            $targetFile = $targetDir . basename($file["name"]);
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-            // Check file size (limit to 2MB)
-            if ($file["size"] > 2000000) {
-                return false; // File too large
-            }
-
-            // Allow certain file formats (for profile pictures)
-            if ($folder === 'profile_pictures' && !in_array($imageFileType, ['jpg', 'png', 'jpeg', 'gif'])) {
-                return false; // Invalid file format
-            }
-
-            // Attempt to move the uploaded file
-            if (move_uploaded_file($file["tmp_name"], $targetFile)) {
-                return $targetFile; // Return the path to the uploaded file
-            }
+        $targetDir = __DIR__ . '/../uploads/' . $folder . '/';
+        $targetFile = $targetDir . basename($file["name"]);
+        if (move_uploaded_file($file["tmp_name"], $targetFile)) {
+            return $targetFile;
         }
-        return false; // Failed to upload
+        return false;
     }
-
-
-
 
 
 

@@ -10,22 +10,23 @@ const LoginModal = ({ open, onClose }) => {
   const navigate = useNavigate(); // Initialize navigate
 
   const handleLogin = async () => {
+    const formData = new FormData();
+    formData.append('action', 'login');
+    formData.append('email', email);
+    formData.append('password', password);
+
     try {
       const response = await axios.post(
         'http://localhost/JobFinder/Backend/public/api.php',
-        {
-          action: 'login',
-          email,
-          password,
-        },
+        formData,
         { withCredentials: true }
       );
 
+      console.log('Response from server:', response.data); // Log the server's response
+
       if (response.data.success) {
-        setLoginMessage('Login successful!');
-        
-        // Redirect based on role
         const userRole = response.data.role;
+
         if (userRole === 'job_seeker') {
           navigate('/job-seeker-details');
         } else if (userRole === 'employer') {

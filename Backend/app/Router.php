@@ -8,11 +8,10 @@ class Router
 {
     public function handleRequest()
     {
-        // You can access $_POST and $_FILES directly
-        error_log(print_r($_POST, true)); // Log the $_POST data
-        error_log(print_r($_FILES, true)); // Log the $_FILES data
-
-        $action = $_POST['action'] ?? ''; // Get the action from the POST data
+        // Access action and other fields directly from $_POST
+        $action = $_POST['action'] ?? ''; // Access action from POST data
+        error_log("POST data: " . print_r($_POST, true));
+        error_log("FILES data: " . print_r($_FILES, true));
 
         $userController = new UserController();
         $employerController = new EmployerController();
@@ -28,6 +27,20 @@ class Router
                 return $employerController->saveEmployerDetails($_POST, $_FILES);
             case 'job_seeker_details':
                 return $userController->jobSeekerDetails($_POST, $_FILES); 
+            case 'checkAuth':
+                session_start();
+                if (isset($_SESSION['user_id'])) {
+                    $response = [
+                        'success' => true,
+                        'user' => [
+                            'user_id' => $_SESSION['user_id'],
+                            'role' => $_SESSION['role'],
+                        ],
+                    ];
+                } else {
+                    $response = ['success' => false];
+                }
+                return $response;
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }

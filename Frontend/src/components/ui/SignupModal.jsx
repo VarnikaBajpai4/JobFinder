@@ -9,18 +9,22 @@ const SignupModal = ({ open, onClose }) => {
   const [role, setRole] = useState('');
 
   const handleSignup = async () => {
-    const data = {
-      action: 'signup',
+    const formData = new FormData();
+    formData.append('action', 'signup');
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('role', role);
+
+    console.log('Sending data:', {
       name,
       email,
       password,
       role,
-    };
-    
-    console.log('Sending data:', data);  //Debugging output
-  
+    });  //Debugging output
+
     try {
-      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', data, { withCredentials: true });
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, { withCredentials: true });
       console.log(response.data);
       if (response.data.success) {
         alert(response.data.message);
@@ -33,7 +37,6 @@ const SignupModal = ({ open, onClose }) => {
       alert('An error occurred during signup.');
     }
   };
-  
 
   return (
     <Modal open={open} onClose={onClose}>

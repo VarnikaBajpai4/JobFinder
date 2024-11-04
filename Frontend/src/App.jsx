@@ -8,6 +8,7 @@ import JobSeekerHome from './pages/JobSeekerHome';
 import EmployerHome from './pages/EmployerHome';
 import EmployerProfile from './pages/EmployerProfile';
 import SeekerProfile from './pages/SeekerProfile';
+import TrackApplications from './pages/TrackApplications';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/employer-home" element={<EmployerHome isEmployer={isEmployer} />} />
         <Route path="/employer-profile" element={<EmployerProfile />} />
         <Route path="/seeker-profile" element={<SeekerProfile />} />
+        <Route path="/track-applications" element={<TrackApplications />} />
 
       </Routes>
     </Router>

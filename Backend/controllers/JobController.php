@@ -139,4 +139,45 @@ class JobController
             return ['success' => false, 'message' => 'Error adding job listing.'];
         }
     }
+
+    public function trackApplications()
+    {
+        session_start();
+
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            return ['success' => false, 'message' => 'User not authenticated.'];
+        }
+
+        try {
+            // Get the employer_id based on the logged-in user's ID
+            $stmt = $this->conn->prepare("SELECT employer_id FROM employers WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            $employer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$employer) {
+                return ['success' => false, 'message' => 'Employer not found.'];
+            }
+
+            $employerId = $employer['employer_id'];
+
+            // Fetch job applications for the employer's job posts
+            $stmt = $this->conn->prepare("
+            SELECT job_applications.application_id, job_applications.application_status, job_applications.applied_at,
+                   job_posts.job_title, job_seekers.seeker_id, job_seekers.full_name
+            FROM job_applications
+            JOIN job_posts ON job_applications.job_id = job_posts.job_id
+            JOIN job_seekers ON job_applications.seeker_id = job_seekers.seeker_id
+            WHERE job_posts.employer_id = ?
+            ORDER BY job_applications.applied_at DESC
+        ");
+            $stmt->execute([$employerId]);
+            $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return ['success' => true, 'data' => $applications];
+        } catch (PDOException $e) {
+            error_log("Database error in trackApplications: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error fetching applications.'];
+        }
+    }
 }

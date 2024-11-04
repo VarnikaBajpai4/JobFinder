@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import useAuthRedirect from '../hooks/useAuthRedirectLogin'; // Import the hook
+import useLogin from '../hooks/useLogin'; // Import the hook
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
@@ -11,7 +11,7 @@ const LoginModal = ({ open, onClose }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for tracking login success
 
   // Call the hook only when `isLoggedIn` changes to `true`
-  useAuthRedirect(isLoggedIn);
+  useLogin(isLoggedIn);
 
   const handleLogin = async () => {
     const formData = new FormData();

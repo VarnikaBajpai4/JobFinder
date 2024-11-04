@@ -1,6 +1,7 @@
 <?php
 // controllers/JobController.php
 
+
 require_once __DIR__ . '/../config/database.php';
 
 class JobController
@@ -31,7 +32,8 @@ class JobController
     public function applyForJob($jobId)
     {
         session_start();
-        error_log("applyForJob session data after session_start: " . print_r($_SESSION, true));
+        //error_log("applyForJob session data after session_start: " . print_r($_SESSION, true));
+        error_log("Session ID: " . session_id());
 
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
@@ -98,6 +100,8 @@ class JobController
     public function addJobListing($data)
     {
         session_start();
+        error_log("Session ID: " . session_id());
+
 
         // Check if user is authenticated
         $userId = $_SESSION['user_id'] ?? null;

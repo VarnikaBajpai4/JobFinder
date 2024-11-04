@@ -34,7 +34,7 @@ class EmployerController
             return ['success' => false, 'message' => 'Failed to save employer details.'];
         }
     }
-    public function getEmployerJobListings() {
+public function getEmployerJobListings() {
         session_start();
 
         if (!isset($_SESSION['user_id'])) {

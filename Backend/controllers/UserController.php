@@ -147,8 +147,11 @@ class UserController
             
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role'];
-            error_log(message: "user id of login: " . print_r($_SESSION, true));
-            
+            //error_log(message: "user id of login: " . print_r($_SESSION, true));
+            error_log("Session ID: " . session_id());
+            error_log("Session save path: " . ini_get("session.save_path"));
+
+
             return ['success' => true, 'message' => 'Login successful', 'role' => $user['role']];
             
         } else {
@@ -163,4 +166,5 @@ class UserController
         session_destroy();  
         return ['success' => true, 'message' => 'Logged out successfully'];
     }
+    
 }

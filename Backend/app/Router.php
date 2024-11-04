@@ -47,6 +47,7 @@ class Router
                 return $jobController->getJobDetails($_GET['job_id']);
             case 'applyForJob':
                 return $jobController->applyForJob($_POST['job_id']);
+
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }

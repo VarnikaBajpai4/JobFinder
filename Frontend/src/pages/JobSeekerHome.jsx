@@ -50,14 +50,18 @@ const JobSeekerHome = () => {
 
   const handleApply = async () => {
     if (!selectedJob) return;
-
+  
     try {
       const formData = new FormData();
       formData.append('action', 'applyForJob');
       formData.append('job_id', selectedJob.job_id);
-
-      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData);
-
+  
+      const response = await axios.post(
+        'http://localhost/JobFinder/Backend/public/api.php',
+        formData,
+        { withCredentials: true }  
+      );
+  
       if (response.data.success) {
         alert('Application submitted successfully.');
       } else {
@@ -68,7 +72,7 @@ const JobSeekerHome = () => {
       alert('Error applying for job. Please try again.');
     }
   };
-
+  
 
   const handleCloseModal = () => {
     setModalOpen(false);

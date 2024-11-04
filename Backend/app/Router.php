@@ -7,13 +7,13 @@ require_once __DIR__ . '/../controllers/JobController.php';
 
 class Router {
     public function handleRequest() {
-        $action = $_POST['action'] ?? $_GET['action'] ?? ''; // Allow both POST and GET for flexibility
+        $action = $_POST['action'] ?? $_GET['action'] ?? '';
         $userController = new UserController();
         $employerController = new EmployerController();
         $jobController = new JobController();
-        
+
         error_log("POST data: " . print_r($_POST, true));
-        
+
         if ($action !== 'checkAuthEmployer') {
             error_log("Incoming action: " . print_r($action, true));
         }
@@ -37,8 +37,10 @@ class Router {
                 return $employerController->checkEmployerDetails();
             case 'checkJobSeekerDetails':
                 return $userController->checkJobSeekerDetails();
-            case 'getEmployerJobListings':  // New case for fetching employer-specific job listings
+            case 'getEmployerJobListings':
                 return $employerController->getEmployerJobListings();
+            case 'addJobListing':  // New case for adding a job listing
+                return $jobController->addJobListing($_POST);
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }

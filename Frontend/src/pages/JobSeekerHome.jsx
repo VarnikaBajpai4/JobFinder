@@ -32,6 +32,28 @@ const JobSeekerHome = () => {
     fetchJobListings();
   }, []);
 
+  const handleLogout = async () => {
+    const formData = new FormData();
+    formData.append('action', 'logout');
+
+    try {
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        alert('Logged out successfully');
+        window.location.href = '/';
+      } else {
+        alert('Failed to log out');
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+      alert('An error occurred while logging out.');
+    }
+  };
+
   const handleViewDetails = async (jobId) => {
     try {
       const response = await axios.get('http://localhost/JobFinder/Backend/public/api.php', {
@@ -50,18 +72,18 @@ const JobSeekerHome = () => {
 
   const handleApply = async () => {
     if (!selectedJob) return;
-  
+
     try {
       const formData = new FormData();
       formData.append('action', 'applyForJob');
       formData.append('job_id', selectedJob.job_id);
-  
+
       const response = await axios.post(
         'http://localhost/JobFinder/Backend/public/api.php',
         formData,
-        { withCredentials: true }  
+        { withCredentials: true }
       );
-  
+
       if (response.data.success) {
         alert('Application submitted successfully.');
       } else {
@@ -72,7 +94,6 @@ const JobSeekerHome = () => {
       alert('Error applying for job. Please try again.');
     }
   };
-  
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -87,8 +108,8 @@ const JobSeekerHome = () => {
             JobFinder
           </Typography>
           <Button color="inherit" component={Link} to="/job-seeker-home">Home</Button>
-          <Button color="inherit" component={Link} to="/employer-home" sx={{ fontSize: '0.9rem', mx: 1 }}>Track Applications</Button>
-          <Button color="inherit" component={Link} to="/seeker-profile">User Profile</Button>
+          <Button color="inherit" component={Link} to="/job-seeker-track" sx={{ fontSize: '0.9rem', mx: 1 }}>Track Applications</Button>
+          <Button color="inherit" onClick={handleLogout}>Logout</Button>
         </Toolbar>
       </AppBar>
 

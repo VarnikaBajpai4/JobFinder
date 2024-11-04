@@ -78,15 +78,16 @@ class JobController
 
 
     public function getJobDetails($jobId)
-    {
+{
+    try {
         $stmt = $this->conn->prepare("
-        SELECT job_posts.job_id, job_posts.job_title, job_posts.location, job_posts.min_experience, 
-               job_posts.salary, job_posts.job_description, job_posts.employment_type, 
-               employers.company_name, employers.company_description 
-        FROM job_posts 
-        JOIN employers ON job_posts.employer_id = employers.employer_id 
-        WHERE job_posts.job_id = ?
-    ");
+            SELECT job_posts.job_id, job_posts.job_title, job_posts.location, job_posts.min_experience, 
+                   job_posts.salary, job_posts.job_description, job_posts.employment_type, 
+                   employers.company_name, employers.company_description 
+            FROM job_posts 
+            JOIN employers ON job_posts.employer_id = employers.employer_id 
+            WHERE job_posts.job_id = ?
+        ");
         $stmt->execute([$jobId]);
         $jobDetails = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -95,7 +96,11 @@ class JobController
         } else {
             return ['success' => false, 'message' => 'Job details not found'];
         }
+    } catch (PDOException $e) {
+        error_log("Database error in getJobDetails: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Error fetching job details.'];
     }
+}
 
     public function addJobListing($data)
     {
@@ -212,6 +217,46 @@ class JobController
         } catch (PDOException $e) {
             error_log("Database error in updateApplicationStatus: " . $e->getMessage());
             return ['success' => false, 'message' => 'Error updating application status.'];
+        }
+    }
+    public function getSeekerApplications()
+    {
+        session_start();
+
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            return ['success' => false, 'message' => 'User not authenticated.'];
+        }
+
+        try {
+            // Get the seeker_id for the authenticated user
+            $stmt = $this->conn->prepare("SELECT seeker_id FROM job_seekers WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            $seeker = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$seeker) {
+                return ['success' => false, 'message' => 'Job seeker not found.'];
+            }
+
+            $seekerId = $seeker['seeker_id'];
+
+            // Fetch job applications for the seeker
+            $stmt = $this->conn->prepare("
+            SELECT job_applications.application_id, job_applications.application_status, job_applications.applied_at,
+                   job_posts.job_id, job_posts.job_title, employers.company_name
+            FROM job_applications
+            JOIN job_posts ON job_applications.job_id = job_posts.job_id
+            JOIN employers ON job_posts.employer_id = employers.employer_id
+            WHERE job_applications.seeker_id = ?
+            ORDER BY job_applications.applied_at DESC
+        ");
+            $stmt->execute([$seekerId]);
+            $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return ['success' => true, 'data' => $applications];
+        } catch (PDOException $e) {
+            error_log("Database error in getSeekerApplications: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error fetching applications.'];
         }
     }
 }

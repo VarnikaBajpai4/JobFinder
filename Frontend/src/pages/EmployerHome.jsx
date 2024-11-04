@@ -34,13 +34,35 @@ const EmployerHome = () => {
     fetchJobListings();
   }, []);
 
+  const handleLogout = async () => {
+    const formData = new FormData();
+    formData.append('action', 'logout');
+
+    try {
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        alert('Logged out successfully');
+        window.location.href = '/';
+      } else {
+        alert('Failed to log out');
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+      alert('An error occurred while logging out.');
+    }
+  };
+
   const handleAddJob = () => {
     setShowAddJobModal(true);
   };
 
   const handleJobAdded = () => {
     setShowAddJobModal(false);
-    fetchJobListings(); // Refresh job listings after adding a new job
+    fetchJobListings();
   };
 
   return (
@@ -53,7 +75,7 @@ const EmployerHome = () => {
           <Box>
             <Button color="inherit" component={Link} to="/employer-home" sx={{ fontSize: '0.9rem', mx: 1 }}>Home</Button>
             <Button color="inherit" component={Link} to="/track-applications" sx={{ fontSize: '0.9rem', mx: 1 }}>Track Applications</Button>
-            <Button color="inherit" component={Link} to="/employer-profile" sx={{ fontSize: '0.9rem', mx: 1 }}>User Profile</Button>
+            <Button color="inherit" onClick={handleLogout}>Logout</Button>
           </Box>
         </Toolbar>
       </AppBar>

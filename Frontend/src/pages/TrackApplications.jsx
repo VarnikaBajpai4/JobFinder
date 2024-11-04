@@ -93,6 +93,28 @@ const TrackApplications = () => {
     if (selectedSeeker) handleStatusUpdate(selectedSeeker.application_id, 'rejected');
   };
 
+  const handleLogout = async () => {
+    const formData = new FormData();
+    formData.append('action', 'logout');
+
+    try {
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        alert('Logged out successfully');
+        window.location.href = '/';
+      } else {
+        alert('Failed to log out');
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+      alert('An error occurred while logging out.');
+    }
+  };
+
   return (
     <Container>
       <Box sx={{ mt: 4 }}>
@@ -108,8 +130,8 @@ const TrackApplications = () => {
               <Button color="inherit" component={Link} to="/track-applications" sx={{ fontSize: '0.9rem', mx: 1 }}>
                 Track Applications
               </Button>
-              <Button color="inherit" component={Link} to="/employer-profile" sx={{ fontSize: '0.9rem', mx: 1 }}>
-                User Profile
+              <Button color="inherit" onClick={handleLogout} sx={{ fontSize: '0.9rem', mx: 1 }}>
+                Logout
               </Button>
             </Box>
           </Toolbar>

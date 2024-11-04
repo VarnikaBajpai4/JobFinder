@@ -44,7 +44,8 @@ class Router
             case 'addJobListing':  // New case for adding a job listing
                 return $jobController->addJobListing($_POST);
             case 'getJobDetails':
-                return $jobController->getJobDetails($_GET['job_id']);
+                return $jobController->getJobDetails($_POST['job_id']);
+
             case 'applyForJob':
                 return $jobController->applyForJob($_POST['job_id']);
             case 'trackApplications':
@@ -55,6 +56,8 @@ class Router
                 $applicationId = $_POST['application_id'];
                 $status = $_POST['status'];
                 return $jobController->updateApplicationStatus($applicationId, $status);
+            case 'getSeekerApplications':
+                return $jobController->getSeekerApplications();
 
             default:
                 return ['success' => false, 'message' => 'Invalid action'];

@@ -42,6 +42,18 @@ CREATE TABLE job_posts (
 );
 -- Insert sample job posts into the job_posts table
 
+CREATE TABLE job_applications (
+    application_id INT PRIMARY KEY AUTO_INCREMENT,
+    job_id INT NOT NULL,
+    seeker_id INT NOT NULL,
+    application_status ENUM('applied', 'rejected', 'accepted') DEFAULT 'applied',
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (job_id) REFERENCES job_posts(job_id) ON DELETE CASCADE,
+    FOREIGN KEY (seeker_id) REFERENCES job_seekers(seeker_id) ON DELETE CASCADE
+);
+
+
+
 INSERT INTO job_posts (employer_id, job_title, location, min_experience, salary, job_description, employment_type)
 VALUES
 (1, 'Full Stack Developer', 'San Francisco, CA', 3, '$90,000 - $120,000', 'Develop and maintain web applications with a focus on both frontend and backend.', 'hybrid'),

@@ -144,10 +144,13 @@ class UserController
 
         if ($user && password_verify($password, $user['password'])) {
             session_start();
-            //error_log("user id of login: " . print_r($_SESSION['user_id'], true));
+            
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role'];
+            error_log(message: "user id of login: " . print_r($_SESSION, true));
+            
             return ['success' => true, 'message' => 'Login successful', 'role' => $user['role']];
+            
         } else {
             return ['success' => false, 'message' => 'Invalid email or password'];
         }
@@ -156,8 +159,8 @@ class UserController
     public function logout()
     {
         session_start();
-        session_unset();    // Unset all session variables
-        session_destroy();  // Destroy the session
+        session_unset();    
+        session_destroy();  
         return ['success' => true, 'message' => 'Logged out successfully'];
     }
 }

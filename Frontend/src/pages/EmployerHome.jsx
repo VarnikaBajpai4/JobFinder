@@ -1,6 +1,6 @@
 // src/pages/EmployerHome.jsx
 import React, { useState, useEffect } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Grid, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
 import JobListingCard from '../components/JobListingCard';
 import AddJobModal from '../components/AddJobModal';
@@ -74,11 +74,20 @@ const EmployerHome = () => {
             <Typography variant="body2">Click "Add Job Listing" to post a new job.</Typography>
           </Paper>
         ) : (
-          <Stack spacing={2} sx={{ width: '100%', maxWidth: 800 }}>
+          <Grid container spacing={4} sx={{ width: '100%', maxWidth: 800 }}>
             {jobListings.map((job) => (
-              <JobListingCard key={job.id} job={job} />
+              <Grid item xs={12} sm={6} md={4} key={job.id}>
+                <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                  <CardContent>
+                    <Typography variant="h6" fontWeight="bold">{job.job_title}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{job.company_name}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{job.location}</Typography>
+                    <Typography variant="body2" color="text.secondary">{job.job_description}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             ))}
-          </Stack>
+          </Grid>
         )}
 
         {showAddJobModal && (

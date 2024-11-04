@@ -5,8 +5,10 @@ require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/EmployerController.php';
 require_once __DIR__ . '/../controllers/JobController.php';
 
-class Router {
-    public function handleRequest() {
+class Router
+{
+    public function handleRequest()
+    {
         $action = $_POST['action'] ?? $_GET['action'] ?? '';
         $userController = new UserController();
         $employerController = new EmployerController();
@@ -41,6 +43,10 @@ class Router {
                 return $employerController->getEmployerJobListings();
             case 'addJobListing':  // New case for adding a job listing
                 return $jobController->addJobListing($_POST);
+            case 'getJobDetails':
+                return $jobController->getJobDetails($_GET['job_id']);
+            case 'applyForJob':
+                return $jobController->applyForJob($_POST['job_id']);
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }

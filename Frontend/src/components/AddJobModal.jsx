@@ -39,7 +39,18 @@ const AddJobModal = ({ onClose, onJobAdded }) => {
 
   return (
     <Modal open onClose={onClose}>
-      <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 500, mx: 'auto', mt: '15vh' }}>
+      <Box
+        sx={{
+          p: 4,
+          backgroundColor: 'white',
+          borderRadius: 2,
+          maxWidth: 500,
+          maxHeight: '80vh', // Set max height for modal
+          overflowY: 'auto',  // Enable scrolling if content overflows
+          mx: 'auto',
+          mt: '10vh'
+        }}
+      >
         <Typography variant="h6" fontWeight="bold" gutterBottom>
           Add Job Listing
         </Typography>
@@ -94,6 +105,7 @@ const AddJobModal = ({ onClose, onJobAdded }) => {
         </Stack>
       </Box>
     </Modal>
+
   );
 };
 

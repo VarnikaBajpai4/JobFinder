@@ -3,31 +3,102 @@
 
 require_once __DIR__ . '/../config/database.php';
 
-class JobController {
+class JobController
+{
     private $conn;
 
 
-    public function __construct() {
+    public function __construct()
+    {
         $database = new Database();
         $this->conn = $database->connect();
     }
 
-    public function getJobListings() {
+    public function getJobListings()
+    {
         $stmt = $this->conn->prepare("
             SELECT job_posts.job_id, job_posts.job_title, job_posts.location, job_posts.job_description, employers.company_name 
             FROM job_posts 
             JOIN employers ON job_posts.employer_id = employers.employer_id
         ");
-        
+
         $stmt->execute();
         $jobListings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return ['success' => true, 'data' => $jobListings];
     }
+    // In JobController.php
+    public function applyForJob($jobId)
+    {
+        session_start();
+        error_log("applyForJob session data after session_start: " . print_r($_SESSION, true));
+
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            error_log("User not authenticated in applyForJob.");
+            return ['success' => false, 'message' => 'User not authenticated.'];
+        }
+
+
+
+        try {
+            // Get the seeker_id for the authenticated user
+            $stmt = $this->conn->prepare("SELECT seeker_id FROM job_seekers WHERE user_id = ?");
+            $stmt->execute([$userId]);
+            $seeker = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$seeker) {
+                return ['success' => false, 'message' => 'User ID not found in the job_seekers table.'];
+            }
+
+            $seekerId = $seeker['seeker_id'];
+
+            // Check if the application already exists
+            $stmt = $this->conn->prepare("SELECT * FROM job_applications WHERE job_id = ? AND seeker_id = ?");
+            $stmt->execute([$jobId, $seekerId]);
+            $existingApplication = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingApplication) {
+                return ['success' => false, 'message' => 'You have already applied for this job.'];
+            }
+
+            // Insert the application into the job_applications table
+            $stmt = $this->conn->prepare("INSERT INTO job_applications (job_id, seeker_id) VALUES (?, ?)");
+            $stmt->execute([$jobId, $seekerId]);
+
+            return ['success' => true, 'message' => 'Application submitted successfully.'];
+        } catch (PDOException $e) {
+            error_log("Database error in applyForJob: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error submitting application.'];
+        }
+    }
+
+
+
+    public function getJobDetails($jobId)
+    {
+        $stmt = $this->conn->prepare("
+        SELECT job_posts.job_id, job_posts.job_title, job_posts.location, job_posts.min_experience, 
+               job_posts.salary, job_posts.job_description, job_posts.employment_type, 
+               employers.company_name, employers.company_description 
+        FROM job_posts 
+        JOIN employers ON job_posts.employer_id = employers.employer_id 
+        WHERE job_posts.job_id = ?
+    ");
+        $stmt->execute([$jobId]);
+        $jobDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($jobDetails) {
+            return ['success' => true, 'data' => $jobDetails];
+        } else {
+            return ['success' => false, 'message' => 'Job details not found'];
+        }
+    }
+
     public function addJobListing($data)
     {
         session_start();
-        
+
         // Check if user is authenticated
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
@@ -64,7 +135,4 @@ class JobController {
             return ['success' => false, 'message' => 'Error adding job listing.'];
         }
     }
-
 }
-
-

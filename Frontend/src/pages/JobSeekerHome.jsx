@@ -1,16 +1,17 @@
 // src/pages/JobSeekerHome.jsx
 
 import React, { useEffect, useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Container, Stack, Card, CardContent, Grid } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Container, Stack, Card, CardContent, Grid, Modal } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import useAuthRedirect from '../hooks/useAuthRedirectLogin';
 
 const JobSeekerHome = () => {
-  // Only allow access if the user is a job seeker
   useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: false });
 
   const [jobListings, setJobListings] = useState([]);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchJobListings = async () => {
@@ -30,6 +31,49 @@ const JobSeekerHome = () => {
 
     fetchJobListings();
   }, []);
+
+  const handleViewDetails = async (jobId) => {
+    try {
+      const response = await axios.get('http://localhost/JobFinder/Backend/public/api.php', {
+        params: { action: 'getJobDetails', job_id: jobId },
+      });
+      if (response.data.success) {
+        setSelectedJob(response.data.data);
+        setModalOpen(true);
+      } else {
+        console.error('Failed to fetch job details');
+      }
+    } catch (error) {
+      console.error('Error fetching job details:', error);
+    }
+  };
+
+  const handleApply = async () => {
+    if (!selectedJob) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('action', 'applyForJob');
+      formData.append('job_id', selectedJob.job_id);
+
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData);
+
+      if (response.data.success) {
+        alert('Application submitted successfully.');
+      } else {
+        alert(response.data.message || 'Failed to submit application.');
+      }
+    } catch (error) {
+      console.error('Error applying for job:', error);
+      alert('Error applying for job. Please try again.');
+    }
+  };
+
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedJob(null);
+  };
 
   return (
     <Box>
@@ -59,6 +103,9 @@ const JobSeekerHome = () => {
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{job.company_name}</Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{job.location}</Typography>
                     <Typography variant="body2" color="text.secondary">{job.job_description}</Typography>
+                    <Button variant="contained" color="primary" sx={{ mt: 2, }} onClick={() => handleViewDetails(job.job_id)}>
+                      View Details
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
@@ -69,9 +116,28 @@ const JobSeekerHome = () => {
             No job listings available.
           </Typography>
         )}
+
+        {/* Modal for job details */}
+        <Modal open={modalOpen} onClose={handleCloseModal} aria-labelledby="job-details-modal" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ bgcolor: 'background.paper', p: 4, width: '80%', maxHeight: '80vh', overflowY: 'auto', borderRadius: 2 }}>
+            {selectedJob && (
+              <>
+                <Typography variant="h5" fontWeight="bold" gutterBottom>{selectedJob.job_title}</Typography>
+                <Typography variant="subtitle1" color="text.secondary" gutterBottom>{selectedJob.company_name}</Typography>
+                <Typography variant="body2" color="text.secondary" gutterBottom>{selectedJob.location}</Typography>
+                <Typography variant="body2" color="text.secondary" gutterBottom>Experience Required: {selectedJob.min_experience} years</Typography>
+                <Typography variant="body2" color="text.secondary" gutterBottom>Salary: {selectedJob.salary}</Typography>
+                <Typography variant="body2" color="text.secondary" gutterBottom>Employment Type: {selectedJob.employment_type}</Typography>
+                <Typography variant="body2" color="text.secondary" gutterBottom>Description: {selectedJob.job_description}</Typography>
+                <Button variant="contained" color="primary" sx={{ mt: 3 }} onClick={handleApply}>Apply Now</Button>
+              </>
+            )}
+          </Box>
+        </Modal>
       </Container>
     </Box>
   );
 };
 
 export default JobSeekerHome;
+

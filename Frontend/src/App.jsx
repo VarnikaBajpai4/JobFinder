@@ -12,7 +12,6 @@ import SeekerTrack from './pages/SeekerTrack';
 
 
 function App() {
-  // Replace with logic to check if the user is an employer or job seeker
 
   return (
     <Router>

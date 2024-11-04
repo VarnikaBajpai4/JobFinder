@@ -41,14 +41,16 @@ const LoginModal = ({ open, onClose }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 400, mx: 'auto', mt: '20vh' }}>
-        <Typography variant="h6">Login</Typography>
+      <Box className="p-8 bg-white rounded-md max-w-md mx-auto mt-20 shadow-md">
+        <Typography className="text-xl font-bold text-gray-800 mb-4">Login</Typography>
         <TextField
           label="Email"
           fullWidth
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="bg-gray-100"
+          InputLabelProps={{ className: "text-gray-700" }}
         />
         <TextField
           label="Password"
@@ -57,18 +59,21 @@ const LoginModal = ({ open, onClose }) => {
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="bg-gray-100"
+          InputLabelProps={{ className: "text-gray-700" }}
         />
-        <Button variant="contained" onClick={handleLogin} fullWidth sx={{ mt: 2 }}>
+        <Button fullWidth onClick={handleLogin} className="mt-4 bg-gray-800 text-white hover:bg-gray-900">
           Login
         </Button>
         {loginMessage && (
-          <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+          <Typography className="text-sm text-gray-600 mt-4">
             {loginMessage}
           </Typography>
         )}
       </Box>
     </Modal>
   );
+
 };
 
 export default LoginModal;

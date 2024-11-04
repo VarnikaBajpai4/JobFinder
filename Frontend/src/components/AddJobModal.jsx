@@ -39,33 +39,26 @@ const AddJobModal = ({ onClose, onJobAdded }) => {
 
   return (
     <Modal open onClose={onClose}>
-      <Box
-        sx={{
-          p: 4,
-          backgroundColor: 'white',
-          borderRadius: 2,
-          maxWidth: 500,
-          maxHeight: '80vh', // Set max height for modal
-          overflowY: 'auto',  // Enable scrolling if content overflows
-          mx: 'auto',
-          mt: '10vh'
-        }}
-      >
-        <Typography variant="h6" fontWeight="bold" gutterBottom>
+      <Box className="p-8 bg-white rounded-lg max-w-lg mx-auto mt-24 max-h-[80vh] overflow-y-auto shadow-lg">
+        <Typography variant="h6" className="text-gray-800 font-bold mb-4">
           Add Job Listing
         </Typography>
-        <Stack spacing={2}>
+        <Stack spacing={4}>
           <TextField
             label="Job Title"
             fullWidth
             value={jobTitle}
             onChange={(e) => setJobTitle(e.target.value)}
+            className="bg-gray-100"
+            InputLabelProps={{ className: "text-gray-700" }}
           />
           <TextField
             label="Location"
             fullWidth
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            className="bg-gray-100"
+            InputLabelProps={{ className: "text-gray-700" }}
           />
           <TextField
             label="Minimum Experience (years)"
@@ -73,12 +66,16 @@ const AddJobModal = ({ onClose, onJobAdded }) => {
             fullWidth
             value={minExperience}
             onChange={(e) => setMinExperience(e.target.value)}
+            className="bg-gray-100"
+            InputLabelProps={{ className: "text-gray-700" }}
           />
           <TextField
             label="Salary"
             fullWidth
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
+            className="bg-gray-100"
+            InputLabelProps={{ className: "text-gray-700" }}
           />
           <TextField
             label="Job Description"
@@ -87,26 +84,25 @@ const AddJobModal = ({ onClose, onJobAdded }) => {
             rows={4}
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
+            className="bg-gray-100"
+            InputLabelProps={{ className: "text-gray-700" }}
           />
-          <FormControl fullWidth>
-            <InputLabel>Employment Type</InputLabel>
-            <Select
-              value={employmentType}
-              onChange={(e) => setEmploymentType(e.target.value)}
-            >
+          <FormControl fullWidth className="bg-gray-100">
+            <InputLabel className="text-gray-700">Employment Type</InputLabel>
+            <Select value={employmentType} onChange={(e) => setEmploymentType(e.target.value)}>
               <MenuItem value="onsite">On-site</MenuItem>
               <MenuItem value="remote">Remote</MenuItem>
               <MenuItem value="hybrid">Hybrid</MenuItem>
             </Select>
           </FormControl>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button variant="contained" onClick={handleSubmit} className="bg-gray-800 text-white hover:bg-gray-900">
             Add Job
           </Button>
         </Stack>
       </Box>
     </Modal>
-
   );
+  
 };
 
 export default AddJobModal;

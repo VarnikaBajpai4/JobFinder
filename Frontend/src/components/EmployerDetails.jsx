@@ -44,24 +44,28 @@ const EmployerDetails = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
-      <Paper elevation={3} sx={{ p: 4, maxWidth: 600, width: '100%', borderRadius: 3 }}>
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
+    <Box className="flex justify-center items-center min-h-screen bg-gray-100">
+      <Paper elevation={3} className="p-8 max-w-lg w-full rounded-md">
+        <Typography className="text-2xl font-bold text-gray-800 mb-6">
           Employer Details
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Stack spacing={3}>
+          <Stack spacing={4}>
             <TextField
               label="Company Name"
               fullWidth
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
+              className="bg-gray-100"
+              InputLabelProps={{ className: "text-gray-700" }}
             />
             <TextField
               label="Location"
               fullWidth
               value={location}
               onChange={(e) => setLocation(e.target.value)}
+              className="bg-gray-100"
+              InputLabelProps={{ className: "text-gray-700" }}
             />
             <TextField
               label="Company Description"
@@ -70,8 +74,10 @@ const EmployerDetails = () => {
               rows={4}
               value={companyDescription}
               onChange={(e) => setCompanyDescription(e.target.value)}
+              className="bg-gray-100"
+              InputLabelProps={{ className: "text-gray-700" }}
             />
-            <Button variant="contained" type="submit" fullWidth>
+            <Button type="submit" fullWidth className="bg-gray-800 text-white hover:bg-gray-900">
               Submit
             </Button>
           </Stack>
@@ -79,6 +85,7 @@ const EmployerDetails = () => {
       </Paper>
     </Box>
   );
+  
 };
 
 export default EmployerDetails;

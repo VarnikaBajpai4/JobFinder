@@ -38,11 +38,11 @@ const SeekerTrack = () => {
             const formData = new FormData();
             formData.append('action', 'getJobDetails');
             formData.append('job_id', jobId);
-    
+
             const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
                 withCredentials: true,
             });
-    
+
             if (response.data.success) {
                 setSelectedJob(response.data.data);
                 setOpen(true);
@@ -53,8 +53,8 @@ const SeekerTrack = () => {
             console.error('Error fetching job details:', error);
         }
     };
-    
-    
+
+
 
     const handleClose = () => {
         setOpen(false);
@@ -88,43 +88,35 @@ const SeekerTrack = () => {
 
     return (
         <Container>
-            <Box sx={{ mt: 4 }}>
-                <AppBar position="fixed" color="transparent" elevation={0} sx={{ borderBottom: '1px solid #e0e0e0', top: 0 }}>
-                    <Toolbar sx={{ justifyContent: 'space-between', minHeight: '56px' }}>
-                        <Typography variant="h5" fontWeight="bold" component="div">
-                            JobFinder
-                        </Typography>
+            <Box className="mt-16">
+                <AppBar position="fixed" color="transparent" elevation={0} className="border-b border-gray-200 bg-white">
+                    <Toolbar className="justify-between min-h-[56px]">
+                        <Typography variant="h5" fontWeight="bold" className="text-gray-800">JobFinder</Typography>
                         <Box>
-                            <Button color="inherit" component={Link} to="/job-seeker-home" sx={{ fontSize: '0.9rem', mx: 1 }}>
-                                Home
-                            </Button>
-                            <Button color="inherit" component={Link} to="/job-seeker-track" sx={{ fontSize: '0.9rem', mx: 1 }}>
-                                Track Applications
-                            </Button>
-                            <Button color="inherit" onClick={handleLogout} sx={{ fontSize: '0.9rem', mx: 1 }}>
-                                Logout
-                            </Button>
+                            <Button className="text-gray-600 hover:text-gray-900" component={Link} to="/job-seeker-home">Home</Button>
+                            <Button className="text-gray-600 hover:text-gray-900" component={Link} to="/job-seeker-track">Track Applications</Button>
+                            <Button className="text-gray-600 hover:text-gray-900" onClick={handleLogout}>Logout</Button>
                         </Box>
                     </Toolbar>
                 </AppBar>
 
-                <Typography variant="h4" align="center" gutterBottom mt={8}>
+                <Typography variant="h4" align="center" className="text-gray-800 mt-20 mb-8">
                     Track Applications
                 </Typography>
 
                 {applications.length === 0 ? (
-                    <Typography variant="body1" color="textSecondary" align="center">
+                    <Typography variant="body1" className="text-gray-600 text-center">
                         No applications found for your job submissions.
                     </Typography>
                 ) : (
-                    <Stack spacing={2}>
+                    <Stack spacing={4} className="mt-4">
                         {applications.map((application) => (
-                            <Paper key={application.application_id} sx={{ p: 2 }}>
-                                <Typography variant="h6">{application.job_title}</Typography>
-                                <Typography variant="body2">Company: {application.company_name}</Typography>
-                                <Typography variant="body2">Status: {application.application_status}</Typography>
-                                <Typography variant="body2">Applied At: {new Date(application.applied_at).toLocaleString()}</Typography>
-                                <Button variant="outlined" onClick={() => handleViewDetails(application.job_id)} sx={{ mt: 2 }}>
+                            <Paper key={application.application_id} className="p-4">
+                                <Typography variant="h6" className="text-gray-800">{application.job_title}</Typography>
+                                <Typography variant="body2" className="text-gray-600">Company: {application.company_name}</Typography>
+                                <Typography variant="body2" className="text-gray-600">Status: {application.application_status}</Typography>
+                                <Typography variant="body2" className="text-gray-600">Applied At: {new Date(application.applied_at).toLocaleString()}</Typography>
+                                <Button variant="outlined" onClick={() => handleViewDetails(application.job_id)} className="mt-4 border-gray-500 text-gray-800 hover:bg-gray-100">
                                     View Details
                                 </Button>
                             </Paper>
@@ -134,38 +126,22 @@ const SeekerTrack = () => {
 
                 {/* Modal for Job Details */}
                 <Modal open={open} onClose={handleClose}>
-                    <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 600, mx: 'auto', mt: '10vh', boxShadow: 24 }}>
+                    <Box className="p-8 bg-white rounded-lg max-w-lg mx-auto mt-24 shadow-lg">
                         {selectedJob ? (
                             <Stack spacing={2}>
-                                <Typography variant="h6" align="center">
+                                <Typography variant="h6" align="center" className="text-gray-800">
                                     Job Details
                                 </Typography>
                                 <Divider />
-                                <Typography variant="body1">
-                                    <strong>Title:</strong> {selectedJob.job_title}
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Company:</strong> {selectedJob.company_name}
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Location:</strong> {selectedJob.location}
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Experience Required:</strong> {selectedJob.min_experience} years
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Salary:</strong> {selectedJob.salary}
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Employment Type:</strong> {selectedJob.employment_type}
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Description:</strong> {selectedJob.job_description}
-                                </Typography>
-                                <Typography variant="body1">
-                                    <strong>Company Description:</strong> {selectedJob.company_description}
-                                </Typography>
-                                <Button variant="contained" onClick={handleClose} sx={{ mt: 3 }}>
+                                <Typography variant="body1"><strong>Title:</strong> {selectedJob.job_title}</Typography>
+                                <Typography variant="body1"><strong>Company:</strong> {selectedJob.company_name}</Typography>
+                                <Typography variant="body1"><strong>Location:</strong> {selectedJob.location}</Typography>
+                                <Typography variant="body1"><strong>Experience Required:</strong> {selectedJob.min_experience} years</Typography>
+                                <Typography variant="body1"><strong>Salary:</strong> {selectedJob.salary}</Typography>
+                                <Typography variant="body1"><strong>Employment Type:</strong> {selectedJob.employment_type}</Typography>
+                                <Typography variant="body1"><strong>Description:</strong> {selectedJob.job_description}</Typography>
+                                <Typography variant="body1"><strong>Company Description:</strong> {selectedJob.company_description}</Typography>
+                                <Button variant="contained" onClick={handleClose} className="bg-gray-800 text-white hover:bg-gray-900 mt-4">
                                     Close
                                 </Button>
                             </Stack>
@@ -177,6 +153,8 @@ const SeekerTrack = () => {
             </Box>
         </Container>
     );
+
+
 };
 
 export default SeekerTrack;

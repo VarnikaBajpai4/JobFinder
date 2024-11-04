@@ -40,14 +40,16 @@ const SignupModal = ({ open, onClose }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 400, mx: 'auto', mt: '20vh' }}>
-        <Typography variant="h6">Signup</Typography>
+      <Box className="p-8 bg-white rounded-md max-w-md mx-auto mt-20 shadow-md">
+        <Typography className="text-xl font-bold text-gray-800 mb-4">Signup</Typography>
         <TextField
           label="Name"
           fullWidth
           margin="normal"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className="bg-gray-100"
+          InputLabelProps={{ className: "text-gray-700" }}
         />
         <TextField
           label="Email"
@@ -55,6 +57,8 @@ const SignupModal = ({ open, onClose }) => {
           margin="normal"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="bg-gray-100"
+          InputLabelProps={{ className: "text-gray-700" }}
         />
         <TextField
           label="Password"
@@ -63,20 +67,23 @@ const SignupModal = ({ open, onClose }) => {
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="bg-gray-100"
+          InputLabelProps={{ className: "text-gray-700" }}
         />
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Role</InputLabel>
-          <Select value={role} onChange={(e) => setRole(e.target.value)}>
+        <FormControl fullWidth margin="normal" className="bg-gray-100">
+          <InputLabel className="text-gray-700">Role</InputLabel>
+          <Select value={role} onChange={(e) => setRole(e.target.value)} className="text-gray-800">
             <MenuItem value="job_seeker">Job Seeker</MenuItem>
             <MenuItem value="employer">Employer</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" onClick={handleSignup} fullWidth sx={{ mt: 2 }}>
+        <Button fullWidth onClick={handleSignup} className="mt-4 bg-gray-800 text-white hover:bg-gray-900">
           Signup
         </Button>
       </Box>
     </Modal>
   );
+  
 };
 
 export default SignupModal;

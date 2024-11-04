@@ -1,7 +1,7 @@
 // src/pages/JobSeekerHome.jsx
 
 import React, { useEffect, useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Container, Stack, Card, CardContent, Grid, Modal } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography,Divider, Button, Container, Stack, Card, CardContent, Grid, Modal } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import useAuthRedirect from '../hooks/useAuthRedirectLogin';
@@ -149,26 +149,40 @@ const JobSeekerHome = () => {
           </Typography>
         )}
 
-        {/* Modal for job details */}
-        <Modal open={modalOpen} onClose={handleCloseModal} aria-labelledby="job-details-modal" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ bgcolor: 'background.paper', p: 4, width: '80%', maxHeight: '80vh', overflowY: 'auto', borderRadius: 2 }}>
-            {selectedJob && (
-              <>
-                <Typography variant="h5" fontWeight="bold" gutterBottom>{selectedJob.job_title}</Typography>
-                <Typography variant="subtitle1" color="text.secondary" gutterBottom>{selectedJob.company_name}</Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>{selectedJob.location}</Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>Experience Required: {selectedJob.min_experience} years</Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>Salary: {selectedJob.salary}</Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>Employment Type: {selectedJob.employment_type}</Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>Description: {selectedJob.job_description}</Typography>
-                <Button variant="contained" color="primary" sx={{ mt: 3 }} onClick={handleApply}>Apply Now</Button>
-                <Button variant="contained" color="primary" onClick={handleCloseModal} sx={{ mt: 3 }}>
-                  Close
-                </Button>
-              </>
+        {/* Modal for Job Details */}
+        <Modal open={modalOpen} onClose={handleCloseModal}>
+          <Box className="p-8 bg-white rounded-lg max-w-lg mx-auto mt-24 shadow-lg">
+            {selectedJob ? (
+              <Stack spacing={2}>
+                <Typography variant="h6" align="center" className="text-gray-800">
+                  Job Details
+                </Typography>
+                <Divider />
+                <Typography variant="body1"><strong>Title:</strong> {selectedJob.job_title}</Typography>
+                <Typography variant="body1"><strong>Company:</strong> {selectedJob.company_name}</Typography>
+                <Typography variant="body1"><strong>Location:</strong> {selectedJob.location}</Typography>
+                <Typography variant="body1"><strong>Experience Required:</strong> {selectedJob.min_experience} years</Typography>
+                <Typography variant="body1"><strong>Salary:</strong> {selectedJob.salary}</Typography>
+                <Typography variant="body1"><strong>Employment Type:</strong> {selectedJob.employment_type}</Typography>
+                <Typography variant="body1"><strong>Description:</strong> {selectedJob.job_description}</Typography>
+                <Typography variant="body1"><strong>Company Description:</strong> {selectedJob.company_description}</Typography>
+
+                {/* Buttons with more spacing */}
+                <Stack direction="row" spacing={4} justifyContent="center" mt={4}>
+                  <Button variant="contained" onClick={handleApply} className="bg-gray-800 text-white hover:bg-gray-900">
+                    Apply Now
+                  </Button>
+                  <Button variant="contained" onClick={handleCloseModal} className="bg-gray-800 text-white hover:bg-gray-900">
+                    Close
+                  </Button>
+                </Stack>
+              </Stack>
+            ) : (
+              <Typography variant="body1">Loading...</Typography>
             )}
           </Box>
         </Modal>
+
       </Container>
     </Box>
   );

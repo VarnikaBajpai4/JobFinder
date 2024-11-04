@@ -57,32 +57,34 @@ const JobSeekerDetails = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>
-      <Paper elevation={3} sx={{ p: 4, maxWidth: 600, width: '100%', borderRadius: 3 }}>
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
+    <Box className="flex justify-center items-center min-h-screen bg-gray-100">
+      <Paper elevation={3} className="p-8 max-w-lg w-full rounded-md">
+        <Typography className="text-2xl font-bold text-gray-800 mb-6">
           Job Seeker Details
         </Typography>
         <form onSubmit={handleSubmit}>
-          <Stack spacing={3}>
+          <Stack spacing={4}>
             <TextField
               label="Full Name"
               fullWidth
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              className="bg-gray-100"
+              InputLabelProps={{ className: "text-gray-700" }}
             />
-
             <TextField
               label="Location (e.g., City, State)"
               fullWidth
               value={location}
               onChange={(e) => setLocation(e.target.value)}
+              className="bg-gray-100"
+              InputLabelProps={{ className: "text-gray-700" }}
             />
-
             <Box>
-              <Typography variant="body1" fontWeight="bold" gutterBottom>
+              <Typography className="text-lg font-bold text-gray-800 mb-2">
                 Skills
               </Typography>
-              <Grid container spacing={1}>
+              <Grid container spacing={2}>
                 {skillOptions.map((skill) => (
                   <Grid item xs={6} sm={4} key={skill}>
                     <FormControlLabel
@@ -91,24 +93,23 @@ const JobSeekerDetails = () => {
                           checked={skills.includes(skill)}
                           onChange={handleSkillChange}
                           value={skill}
+                          className="text-gray-800"
                         />
                       }
-                      label={skill}
+                      label={<span className="text-gray-700">{skill}</span>}
                     />
                   </Grid>
                 ))}
               </Grid>
             </Box>
-
             <FormControl>
-              <Button variant="outlined" component="label">
+              <Button variant="outlined" component="label" className="border-gray-500 text-gray-800">
                 Upload Resume
                 <input type="file" hidden onChange={handleResumeChange} />
               </Button>
-              {resume && <Typography variant="caption">{resume.name}</Typography>}
+              {resume && <Typography className="text-sm text-gray-600 mt-2">{resume.name}</Typography>}
             </FormControl>
-
-            <Button variant="contained" type="submit" fullWidth>
+            <Button type="submit" fullWidth className="bg-gray-800 text-white hover:bg-gray-900">
               Submit
             </Button>
           </Stack>
@@ -116,6 +117,7 @@ const JobSeekerDetails = () => {
       </Paper>
     </Box>
   );
+  
 };
 
 export default JobSeekerDetails;

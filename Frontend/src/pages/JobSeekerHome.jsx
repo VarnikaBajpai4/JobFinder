@@ -7,7 +7,8 @@ import axios from 'axios';
 import useAuthRedirect from '../hooks/useAuthRedirectLogin';
 
 const JobSeekerHome = () => {
-  useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: false, active: false });
+  // Only allow access if the user is a job seeker
+  useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: false });
 
   const [jobListings, setJobListings] = useState([]);
 

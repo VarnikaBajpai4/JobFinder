@@ -8,7 +8,8 @@ import axios from 'axios';
 import useAuthRedirect from '../hooks/useAuthRedirectLogin';
 
 const EmployerHome = () => {
-  useAuthRedirect({ requiredRole: 'employer', redirectCondition: false, active: false });
+  // Only allow access if the user is an employer
+  useAuthRedirect({ requiredRole: 'employer', redirectCondition: false });
 
   const [jobListings, setJobListings] = useState([]);
   const [showAddJobForm, setShowAddJobForm] = useState(false);

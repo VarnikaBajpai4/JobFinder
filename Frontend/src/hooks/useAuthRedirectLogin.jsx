@@ -1,10 +1,10 @@
-// src/hooks/useAuthRedirectLogin.js
+// src/hooks/useAuthRedirect.js
 
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const useAuthRedirect = ({ requiredRole, redirectCondition, active = true }) => {
+const useAuthRedirect = ({ requiredRole, redirectCondition = false, active = true }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +22,7 @@ const useAuthRedirect = ({ requiredRole, redirectCondition, active = true }) => 
         );
 
         if (!authResponse.data.success) {
+          // If not authenticated, redirect to the landing page
           navigate('/');
           return;
         }
@@ -29,7 +30,8 @@ const useAuthRedirect = ({ requiredRole, redirectCondition, active = true }) => 
         const userRole = authResponse.data.role;
 
         if (userRole !== requiredRole) {
-          navigate('/');
+          // Redirect to the correct home page based on the user's role
+          navigate(userRole === 'job_seeker' ? '/job-seeker-home' : '/employer-home');
           return;
         }
 

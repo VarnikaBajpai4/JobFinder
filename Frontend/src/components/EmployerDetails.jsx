@@ -1,6 +1,6 @@
 import React, { useState,useEffect} from 'react';
 import axios from 'axios';
-import useEmployerAuthCheck from '../../hooks/useEmployerAuthCheck';
+import useEmployerAuthCheck from '../hooks/useEmployerAuthCheck';
 
 import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Paper, Stack } from '@mui/material';
 

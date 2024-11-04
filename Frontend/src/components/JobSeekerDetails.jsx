@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
-import useJobSeekerAuthCheck from '../../hooks/useJobSeekerAuthCheck';
+import useJobSeekerAuthCheck from '../hooks/useJobSeekerAuthCheck';
 
 
 

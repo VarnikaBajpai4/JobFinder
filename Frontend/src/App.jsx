@@ -1,9 +1,9 @@
 // src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './components/ui/LandingPage';
-import JobSeekerDetails from './components/ui/JobSeekerDetails';
-import EmployerDetails from './components/ui/EmployerDetails';
+import LandingPage from './components/LandingPage';
+import JobSeekerDetails from './components/JobSeekerDetails';
+import EmployerDetails from './components/EmployerDetails';
 
 function App() {
   return (

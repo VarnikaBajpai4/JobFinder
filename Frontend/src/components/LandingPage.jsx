@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Container, Typography, Button, Box, Stack, Grid } from '@mui/material';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
-import mncLogo from '../../assets/mnc.png';
-import fintechLogo from '../../assets/fintech.png';
-import retailLogo from '../../assets/retail.png';
-import startupLogo from '../../assets/startup.png';
-import edtechLogo from '../../assets/edtech.png';
+import mncLogo from '../assets/mnc.png';
+import fintechLogo from '../assets/fintech.png';
+import retailLogo from '../assets/retail.png';
+import startupLogo from '../assets/startup.png';
+import edtechLogo from '../assets/edtech.png';
 
 
 

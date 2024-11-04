@@ -202,6 +202,17 @@ const TrackApplications = () => {
                   <Button variant="contained" onClick={handleClose}>
                     Close
                   </Button>
+                  {selectedSeeker.email && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      href={`https://mail.google.com/mail/u/0/?fs=1&to=${selectedSeeker.email}&su=SUBJECT&body=BODY&tf=cm`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Mail
+                    </Button>
+                  )}
                 </Stack>
               </Stack>
             ) : (

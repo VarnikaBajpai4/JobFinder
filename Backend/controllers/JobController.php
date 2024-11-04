@@ -78,9 +78,9 @@ class JobController
 
 
     public function getJobDetails($jobId)
-{
-    try {
-        $stmt = $this->conn->prepare("
+    {
+        try {
+            $stmt = $this->conn->prepare("
             SELECT job_posts.job_id, job_posts.job_title, job_posts.location, job_posts.min_experience, 
                    job_posts.salary, job_posts.job_description, job_posts.employment_type, 
                    employers.company_name, employers.company_description 
@@ -88,19 +88,19 @@ class JobController
             JOIN employers ON job_posts.employer_id = employers.employer_id 
             WHERE job_posts.job_id = ?
         ");
-        $stmt->execute([$jobId]);
-        $jobDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$jobId]);
+            $jobDetails = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($jobDetails) {
-            return ['success' => true, 'data' => $jobDetails];
-        } else {
-            return ['success' => false, 'message' => 'Job details not found'];
+            if ($jobDetails) {
+                return ['success' => true, 'data' => $jobDetails];
+            } else {
+                return ['success' => false, 'message' => 'Job details not found'];
+            }
+        } catch (PDOException $e) {
+            error_log("Database error in getJobDetails: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error fetching job details.'];
         }
-    } catch (PDOException $e) {
-        error_log("Database error in getJobDetails: " . $e->getMessage());
-        return ['success' => false, 'message' => 'Error fetching job details.'];
     }
-}
 
     public function addJobListing($data)
     {
@@ -192,7 +192,12 @@ class JobController
     public function getJobSeekerDetails($seekerId)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT full_name, location, skills, resume FROM job_seekers WHERE seeker_id = ?");
+            $stmt = $this->conn->prepare("
+            SELECT job_seekers.full_name, job_seekers.location, job_seekers.skills, job_seekers.resume, users.email 
+            FROM job_seekers 
+            JOIN users ON job_seekers.user_id = users.user_id 
+            WHERE job_seekers.seeker_id = ?
+        ");
             $stmt->execute([$seekerId]);
             $seekerDetails = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -207,6 +212,7 @@ class JobController
             return ['success' => false, 'message' => 'Error fetching job seeker details.'];
         }
     }
+
     public function updateApplicationStatus($applicationId, $status)
     {
         try {

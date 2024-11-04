@@ -1,22 +1,24 @@
-import React, { useState,useEffect} from 'react';
+// src/components/EmployerDetails.jsx
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useEmployerAuthCheck from '../hooks/useEmployerAuthCheck';
-
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Paper, Stack } from '@mui/material';
 
 const EmployerDetails = () => {
   const checkAuth = useEmployerAuthCheck();
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
 
   useEffect(() => {
     const authenticateUser = async () => {
-      const user = await checkAuth(); 
+      const user = await checkAuth();
       if (!user) {
         console.log('User not authenticated. Redirecting to landing page...');
         return;
       }
     };
 
-    authenticateUser(); 
+    authenticateUser();
   }, [checkAuth]);
 
   const [companyName, setCompanyName] = useState('');
@@ -28,7 +30,7 @@ const EmployerDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData(); // Use FormData for sending data
     formData.append('action', 'saveEmployerDetails');
     formData.append('companyName', companyName);
@@ -37,21 +39,24 @@ const EmployerDetails = () => {
     formData.append('location', location);
     formData.append('workArrangement', workArrangement);
     formData.append('experienceYears', experienceYears);
-  
+
     try {
       const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }, // Set content type for FormData
         withCredentials: true,
       });
-  
-      console.log(response.data);
+
       alert(response.data.success ? 'Employer details saved successfully' : 'Failed to save employer details');
+
+      // Redirect to the homepage if submission was successful
+      if (response.data.success) {
+        navigate('/home'); // Redirect to the homepage after successful submission
+      }
     } catch (error) {
       console.error('Error submitting employer details:', error);
       alert('An error occurred while submitting employer details.');
     }
   };
-  
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>

@@ -2,23 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
 import useJobSeekerAuthCheck from '../hooks/useJobSeekerAuthCheck';
-
-
+import { useNavigate } from 'react-router-dom';
 
 const JobSeekerDetails = () => {
   const checkAuth = useJobSeekerAuthCheck();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const authenticateUser = async () => {
       const user = await checkAuth(); 
       if (!user) {
         console.log('User not authenticated. Redirecting to landing page...');
+        navigate('/');
         return;
       }
     };
 
     authenticateUser(); 
-  }, [checkAuth]);
+  }, [checkAuth, navigate]);
 
   const [fullName, setFullName] = useState('');
   const [location, setLocation] = useState('');
@@ -42,10 +43,10 @@ const JobSeekerDetails = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('action', 'job_seeker_details'); // This is still correct
+    formData.append('action', 'job_seeker_details');
     formData.append('full_name', fullName);
     formData.append('location', location);
-    formData.append('skills', JSON.stringify(skills)); // Convert skills array to JSON
+    formData.append('skills', JSON.stringify(skills));
     formData.append('resume', resume);
 
     try {
@@ -54,13 +55,17 @@ const JobSeekerDetails = () => {
         withCredentials: true,
       });
 
-      alert(response.data.message);
+      if (response.data.success) {
+        alert(response.data.message);
+        navigate('/home'); // Redirect to homepage upon successful submission
+      } else {
+        alert(response.data.message || 'An error occurred while submitting the form.');
+      }
     } catch (error) {
       console.error('Error submitting job seeker details:', error);
       alert('An error occurred while submitting the form.');
     }
   };
-
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: '#f5f5f5' }}>

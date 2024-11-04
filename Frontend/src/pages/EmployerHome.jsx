@@ -1,6 +1,6 @@
 // src/pages/EmployerHome.jsx
 import React, { useState, useEffect } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Container, Stack, Card, CardContent, Grid } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import JobListingCard from '../components/JobListingCard';
 import axios from 'axios';
@@ -11,7 +11,7 @@ const EmployerHome = () => {
 
     // Fetch job listings posted by the employer
     useEffect(() => {
-
+        // Logic to fetch job listings here, if needed
     }, []);
 
     const handleAddJob = () => {
@@ -25,12 +25,11 @@ const EmployerHome = () => {
                     <Typography variant="h5" fontWeight="bold" component="div" sx={{ flexGrow: 1 }}>
                         JobFinder
                     </Typography>
-                    <Button color="inherit" component={Link} to="/job-seeker-home">Home</Button>
-                    <Button color="inherit" component={Link} to="/track-applications">Track Applications</Button>
-                    <Button color="inherit" component={Link} to="/user-profile">User Profile</Button>
+                    <Button color="inherit" component={Link} to="/employer-home">Home</Button>
+                    <Button color="inherit" component={Link} to="/employer-home">Track Applications</Button>
+                    <Button color="inherit" component={Link} to="/employer-profile">User Profile</Button>
                 </Toolbar>
             </AppBar>
-
 
             <Typography variant="h4" fontWeight="bold" gutterBottom>
                 Employer Dashboard

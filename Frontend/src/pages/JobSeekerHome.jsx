@@ -36,7 +36,7 @@ const JobSeekerHome = () => {
           </Typography>
           <Button color="inherit" component={Link} to="/job-seeker-home">Home</Button>
           <Button color="inherit" component={Link} to="/track-applications">Track Applications</Button>
-          <Button color="inherit" component={Link} to="/user-profile">User Profile</Button>
+          <Button color="inherit" component={Link} to="/seeker-profile">User Profile</Button>
         </Toolbar>
       </AppBar>
 

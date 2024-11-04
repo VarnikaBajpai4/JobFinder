@@ -119,20 +119,36 @@ class UserController
 
     public function signup($data)
     {
-        $username = $data['name']; // Keeping $username to match database field
+        $username = $data['name'];
         $email = $data['email'];
-        $password = password_hash($data['password'], PASSWORD_BCRYPT);
+        $password = $data['password'];
         $role = $data['role'];
-
-        // Update the SQL query to use username
+    
+        // Basic validations without restricting username characters
+        if (empty($username)) {
+            return ['success' => false, 'message' => 'Username cannot be empty.'];
+        }
+    
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['success' => false, 'message' => 'Invalid email format.'];
+        }
+    
+        if (!preg_match("/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $password)) {
+            return ['success' => false, 'message' => 'Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one number, and one special character.'];
+        }
+    
+        // Hash the password after validation
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+    
+        // Prepare and execute the SQL statement
         $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
-        if ($stmt->execute([$username, $email, $password, $role])) {
+        if ($stmt->execute([$username, $email, $passwordHash, $role])) {
             return ['success' => true, 'message' => 'Signup successful', 'role' => $role];
         } else {
             return ['success' => false, 'message' => 'Signup failed'];
         }
     }
-
+    
     public function login($data)
     {
         $email = $data['email'];
@@ -158,7 +174,7 @@ class UserController
             return ['success' => false, 'message' => 'Invalid email or password'];
         }
     }
-
+    
     public function logout()
     {
         session_start();

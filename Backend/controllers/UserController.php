@@ -26,8 +26,9 @@ class UserController
         $stmt->execute([$userId]);
         $jobSeeker = $stmt->fetch();
 
-        return ['success' => true, 'exists' => $jobSeeker !== false];
+        return ['success' => true, 'hasDetails' => $jobSeeker !== false];
     }
+
 
     public function jobSeekerDetails($data, $files)
     {
@@ -96,7 +97,25 @@ class UserController
 
 
 
+    public function checkAuthStatus()
+    {
+        session_start();
 
+        if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
+            return [
+                'success' => true,
+                'isLoggedIn' => true,
+                'role' => $_SESSION['role'],
+                'userId' => $_SESSION['user_id'],
+            ];
+        } else {
+            return [
+                'success' => false,
+                'isLoggedIn' => false,
+                'message' => 'User is not authenticated',
+            ];
+        }
+    }
 
     public function signup($data)
     {

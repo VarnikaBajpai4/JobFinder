@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 import { Button, Box, Typography } from '@mui/material';
 
+
 const SeekerProfile = () => {
   const handleLogout = async () => {
     const formData = new FormData();

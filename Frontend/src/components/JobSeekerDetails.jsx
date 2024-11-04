@@ -1,50 +1,21 @@
+// src/components/JobSeekerDetails.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
-import useJobSeekerAuthCheck from '../hooks/useJobSeekerAuthCheck';
 import { useNavigate } from 'react-router-dom';
-
+import useAuthRedirect from '../hooks/useAuthRedirectLogin'; // Import the hook
 
 const JobSeekerDetails = () => {
-  const checkAuth = useJobSeekerAuthCheck();
+  useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: true });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const authenticateUser = async () => {
-      const user = await checkAuth();
-      if (!user) {
-        console.log('User not authenticated. Redirecting to landing page...');
-        navigate('/');
-        return;
-      }
-
-      // Check if job seeker details already exist
-      const formData = new FormData();
-      formData.append('action', 'checkJobSeekerDetails');
-
-      try {
-        const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
-          withCredentials: true,
-        });
-
-        if (response.data.success && response.data.exists) {
-          // Redirect to job seeker home if details already exist
-          navigate('/job-seeker-home', { replace: true });
-        }
-      } catch (error) {
-        console.error('Error checking job seeker details:', error);
-      }
-    };
-
-    authenticateUser();
-  }, [checkAuth, navigate]);
-
   const [fullName, setFullName] = useState('');
   const [location, setLocation] = useState('');
   const [skills, setSkills] = useState([]);
   const [resume, setResume] = useState(null);
 
+
   const skillOptions = ['JavaScript', 'Python', 'React', 'Node.js', 'Other'];
+
 
   const handleResumeChange = (e) => {
     setResume(e.target.files[0]);

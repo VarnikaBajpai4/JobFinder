@@ -1,18 +1,17 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import useEmployerRedirect from '../hooks/useEmployerRedirect';
-import useJobSeekerRedirect from '../hooks/useJobSeekerRedirect';
+import useAuthRedirect from '../hooks/useAuthRedirectLogin'; // Import the hook
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
-  const navigate = useNavigate();
-  
-  const checkEmployerDetails = useEmployerRedirect();
-  const checkJobSeekerDetails = useJobSeekerRedirect();
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for tracking login success
+
+  // Call the hook only when `isLoggedIn` changes to `true`
+  useAuthRedirect(isLoggedIn);
 
   const handleLogin = async () => {
     const formData = new FormData();
@@ -30,13 +29,7 @@ const LoginModal = ({ open, onClose }) => {
       console.log('Response from server:', response.data);
 
       if (response.data.success) {
-        const userRole = response.data.role;
-
-        if (userRole === 'job_seeker') {
-          checkJobSeekerDetails(); // Redirect based on job seeker details
-        } else if (userRole === 'employer') {
-          checkEmployerDetails(); // Redirect based on employer details
-        }
+        setIsLoggedIn(true); // Set login state to true after a successful login
       } else {
         setLoginMessage(response.data.message || 'Login failed');
       }

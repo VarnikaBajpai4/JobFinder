@@ -53,7 +53,7 @@ class EmployerController {
         $stmt->execute([$userId]);
         $employer = $stmt->fetch();
     
-        return ['success' => true, 'exists' => $employer !== false];
+        return ['success' => true, 'hasDetails' => $employer !== false];
     }
     
 }

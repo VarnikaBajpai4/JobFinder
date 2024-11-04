@@ -1,12 +1,15 @@
 // src/pages/JobSeekerHome.jsx
+
 import React, { useEffect, useState } from 'react';
 import { Box, AppBar, Toolbar, Typography, Button, Container, Stack, Card, CardContent, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import useAuthRedirect from '../hooks/useAuthRedirectLogin';
 
 const JobSeekerHome = () => {
+  useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: false, active: false });
+
   const [jobListings, setJobListings] = useState([]);
-  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const fetchJobListings = async () => {
@@ -35,14 +38,13 @@ const JobSeekerHome = () => {
             JobFinder
           </Typography>
           <Button color="inherit" component={Link} to="/job-seeker-home">Home</Button>
-          <Button color="inherit" component={Link} to="/track-applications">Track Applications</Button>
           <Button color="inherit" component={Link} to="/seeker-profile">User Profile</Button>
         </Toolbar>
       </AppBar>
 
       <Container sx={{ mt: 5 }}>
         <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
-          {userRole === 'employer' ? 'Manage Your Job Listings' : 'Available Job Listings'}
+          Available Job Listings
         </Typography>
 
         {jobListings.length > 0 ? (
@@ -56,17 +58,6 @@ const JobSeekerHome = () => {
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{job.location}</Typography>
                     <Typography variant="body2" color="text.secondary">{job.job_description}</Typography>
                   </CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
-                    <Button 
-                      variant="contained" 
-                      color="primary" 
-                      fullWidth 
-                      onClick={() => window.location.href = `/job/${job.job_id}`}
-                      sx={{ mr: 1 }}
-                    >
-                      View Details
-                    </Button>
-                  </Box>
                 </Card>
               </Grid>
             ))}

@@ -3,31 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, Paper, Stack } from '@mui/material';
+import useAuthRedirect from '../hooks/useAuthRedirectLogin'; // Import the hook
+
 
 const EmployerDetails = () => {
   const navigate = useNavigate();
+  useAuthRedirect({ requiredRole: 'employer', redirectCondition: true });
 
-  useEffect(() => {
-    const checkIfDetailsExist = async () => {
-      const formData = new FormData();
-      formData.append('action', 'checkEmployerDetails');
 
-      try {
-        const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
-          withCredentials: true,
-        });
-
-        if (response.data.success && response.data.exists) {
-          // Redirect to employer home if details already exist
-          navigate('/employer-home', { replace: true });
-        }
-      } catch (error) {
-        console.error('Error checking employer details:', error);
-      }
-    };
-
-    checkIfDetailsExist();
-  }, [navigate]);
 
   // Form handling state and code remains the same
   const [companyName, setCompanyName] = useState('');

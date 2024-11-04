@@ -1,4 +1,3 @@
-// src/pages/EmployerHome.jsx
 import React, { useState, useEffect } from 'react';
 import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Grid, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';

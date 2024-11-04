@@ -16,12 +16,6 @@ const SignupModal = ({ open, onClose }) => {
     formData.append('password', password);
     formData.append('role', role);
 
-    console.log('Sending data:', {
-      name,
-      email,
-      password,
-      role,
-    });  //Debugging output
 
     try {
       const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, { withCredentials: true });

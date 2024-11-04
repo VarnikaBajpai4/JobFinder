@@ -13,8 +13,8 @@ CREATE TABLE job_seekers (
     user_id INT NOT NULL,
     full_name VARCHAR(100) NOT NULL,
     location VARCHAR(100),
-    skills JSON,  -- Using JSON to store multiple skills in an array format
-    resume VARCHAR(255),  -- Stores the file path or filename of the uploaded resume
+    skills JSON,  
+    resume VARCHAR(255),  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -31,16 +31,15 @@ CREATE TABLE employers (
 CREATE TABLE job_posts (
     job_id INT PRIMARY KEY AUTO_INCREMENT,
     employer_id INT NOT NULL,
-    job_title VARCHAR(100) NOT NULL,             -- Job Title/Role
-    location VARCHAR(100) NOT NULL,              -- Location
-    min_experience TINYINT UNSIGNED,             -- Minimum Work Experience required
-    salary VARCHAR(50),                          -- Salary (optional; format as text for flexibility)
-    job_description TEXT,                        -- Job Description
-    employment_type ENUM('remote', 'hybrid', 'onsite') NOT NULL,  -- Employment Type
+    job_title VARCHAR(100) NOT NULL,            
+    location VARCHAR(100) NOT NULL,             
+    min_experience TINYINT UNSIGNED,             
+    salary VARCHAR(50),                          
+    job_description TEXT,                        
+    employment_type ENUM('remote', 'hybrid', 'onsite') NOT NULL,  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (employer_id) REFERENCES employers(employer_id) ON DELETE CASCADE
 );
--- Insert sample job posts into the job_posts table
 
 CREATE TABLE job_applications (
     application_id INT PRIMARY KEY AUTO_INCREMENT,

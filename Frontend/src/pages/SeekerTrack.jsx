@@ -17,7 +17,7 @@ const SeekerTrack = () => {
         const fetchApplications = async () => {
             try {
                 const formData = new FormData();
-                formData.append('action', 'getSeekerApplications'); // Backend action for seeker applications
+                formData.append('action', 'getSeekerApplications'); 
 
                 const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
                     withCredentials: true,
@@ -127,7 +127,6 @@ const SeekerTrack = () => {
                     </Stack>
                 )}
 
-                {/* Modal for Job Details */}
                 <Modal open={open} onClose={handleClose}>
                     <Box className="p-8 bg-white rounded-lg max-w-lg mx-auto mt-24 shadow-lg">
                         {selectedJob ? (

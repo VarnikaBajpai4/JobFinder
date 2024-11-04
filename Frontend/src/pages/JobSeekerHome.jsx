@@ -1,4 +1,3 @@
-// src/pages/JobSeekerHome.jsx
 
 import React, { useEffect, useState } from 'react';
 import { Box, AppBar, Toolbar, Typography,Divider, Button, Container, Stack, Card, CardContent, Grid, Modal } from '@mui/material';
@@ -149,7 +148,6 @@ const JobSeekerHome = () => {
           </Typography>
         )}
 
-        {/* Modal for Job Details */}
         <Modal open={modalOpen} onClose={handleCloseModal}>
           <Box className="p-8 bg-white rounded-lg max-w-lg mx-auto mt-24 shadow-lg">
             {selectedJob ? (
@@ -167,7 +165,6 @@ const JobSeekerHome = () => {
                 <Typography variant="body1"><strong>Description:</strong> {selectedJob.job_description}</Typography>
                 <Typography variant="body1"><strong>Company Description:</strong> {selectedJob.company_description}</Typography>
 
-                {/* Buttons with more spacing */}
                 <Stack direction="row" spacing={4} justifyContent="center" mt={4}>
                   <Button variant="contained" onClick={handleApply} className="bg-gray-800 text-white hover:bg-gray-900">
                     Apply Now

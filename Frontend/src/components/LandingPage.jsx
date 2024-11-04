@@ -16,7 +16,6 @@ const LandingPage = () => {
 
   return (
     <Box sx={{ overflowY: 'auto', maxHeight: '100vh' }}>
-      {/* Sticky Header */}
       <Box
         sx={{
           position: 'sticky',
@@ -42,9 +41,7 @@ const LandingPage = () => {
         </Container>
       </Box>
 
-      {/* Main Content */}
       <Container maxWidth="lg" sx={{ pt: 4 }}>
-        {/* Hero Section */}
         <Box textAlign="center" mb={8}>
           <Typography variant="h2" fontWeight="bold" gutterBottom>
             Find full-time developer jobs.
@@ -54,7 +51,6 @@ const LandingPage = () => {
           </Typography>
         </Box>
 
-        {/* Top Companies Hiring Section */}
         <Box mb={8}>
           <Typography variant="h4" fontWeight="bold" mb={2}>
             Top companies hiring now
@@ -118,13 +114,11 @@ const LandingPage = () => {
           </Grid>
         </Box>
 
-        {/* Featured Companies Section */}
         <Box mb={8}>
           <Typography variant="h4" fontWeight="bold" mb={2}>
             Featured companies actively hiring
           </Typography>
           <Grid container spacing={3}>
-            {/* Sample cards */}
             {['Capgemini', 'Accolite Digital', 'Actalent Services', 'FIS', 'Genpact'].map((company) => (
               <Grid item xs={12} sm={6} md={4} key={company}>
                 <Box
@@ -139,7 +133,6 @@ const LandingPage = () => {
                     {company}
                   </Typography>
                   <Typography color="textSecondary">Global leader in tech services</Typography>
-                  {/* Placeholder rating */}
                   <Typography variant="body2" color="textSecondary" mt={1}>
                     ⭐ 4.5 | 10k+ reviews
                   </Typography>
@@ -153,7 +146,6 @@ const LandingPage = () => {
         
       </Container>
 
-      {/* Modals */}
       <LoginModal open={openLogin} onClose={() => setOpenLogin(false)} />
       <SignupModal open={openSignup} onClose={() => setOpenSignup(false)} />
     </Box>

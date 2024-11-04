@@ -1,5 +1,4 @@
 <?php
-// controllers/UserController.php
 
 
 require_once __DIR__ . '/../config/database.php';
@@ -32,12 +31,10 @@ class UserController
 
     public function jobSeekerDetails($data, $files)
     {
-        // Check required fields
         if (empty($data['full_name']) || empty($data['location']) || empty($data['skills'])) {
             return ['success' => false, 'message' => 'All fields are required.'];
         }
 
-        // Handle resume upload
         $resume = $files['resume'] ?? null;
         if ($resume && $resume['error'] === 0) {
             $resumePath = $this->handleFileUpload($resume, 'resumes');
@@ -48,18 +45,15 @@ class UserController
             return ['success' => false, 'message' => 'Resume is required.'];
         }
 
-        // Convert skills to JSON
         $skillsArray = array_map('trim', explode(',', $data['skills']));
         $skillsJson = json_encode($skillsArray);
 
-        // Get user_id from session
         session_start();
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
             return ['success' => false, 'message' => 'User not authenticated.'];
         }
 
-        // Save job seeker details
         if ($this->saveJobSeekerDetails($data, $resumePath, $skillsJson, $userId)) {
             return ['success' => true, 'message' => 'Job seeker details saved successfully.'];
         } else {
@@ -124,7 +118,6 @@ class UserController
         $password = $data['password'];
         $role = $data['role'];
     
-        // Basic validations without restricting username characters
         if (empty($username)) {
             return ['success' => false, 'message' => 'Username cannot be empty.'];
         }
@@ -137,10 +130,8 @@ class UserController
             return ['success' => false, 'message' => 'Password must be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one number, and one special character.'];
         }
     
-        // Hash the password after validation
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
     
-        // Prepare and execute the SQL statement
         $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
         if ($stmt->execute([$username, $email, $passwordHash, $role])) {
             return ['success' => true, 'message' => 'Signup successful', 'role' => $role];
@@ -163,7 +154,6 @@ class UserController
             
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['role'] = $user['role'];
-            //error_log(message: "user id of login: " . print_r($_SESSION, true));
             error_log("Session ID: " . session_id());
             error_log("Session save path: " . ini_get("session.save_path"));
 

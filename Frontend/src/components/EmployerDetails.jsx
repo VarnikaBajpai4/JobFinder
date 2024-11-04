@@ -1,10 +1,8 @@
-// src/components/EmployerDetails.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, Paper, Stack } from '@mui/material';
-import useAuthRedirect from '../hooks/useAuthRedirectLogin'; // Import the hook
-
+import useAuthRedirect from '../hooks/useAuthRedirectLogin'; 
 
 const EmployerDetails = () => {
   const navigate = useNavigate();
@@ -12,7 +10,6 @@ const EmployerDetails = () => {
 
 
 
-  // Form handling state and code remains the same
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
   const [companyDescription, setCompanyDescription] = useState('');

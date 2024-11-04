@@ -165,7 +165,6 @@ const TrackApplications = () => {
           </Stack>
         )}
 
-        {/* Modal for Job Seeker Details */}
         <Modal open={open} onClose={handleClose}>
           <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 600, mx: 'auto', mt: '10vh', boxShadow: 24 }}>
             {selectedSeeker ? (

@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React from 'react';
 import ProfileDropdown from './ProfileDropdown';
 import { Link, NavLink } from 'react-router-dom';

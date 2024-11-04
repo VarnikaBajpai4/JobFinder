@@ -1,4 +1,3 @@
-// src/components/AddJobModal.jsx
 import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem, Stack } from '@mui/material';
 import axios from 'axios';
@@ -27,8 +26,8 @@ const AddJobModal = ({ onClose, onJobAdded }) => {
       });
 
       if (response.data.success) {
-        onJobAdded(); // Notify parent component to refresh job listings
-        onClose(); // Close modal after successful submission
+        onJobAdded(); 
+        onClose(); 
       } else {
         console.error('Failed to add job listing:', response.data.message);
       }

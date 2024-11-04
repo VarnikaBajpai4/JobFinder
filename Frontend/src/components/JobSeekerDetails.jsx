@@ -1,10 +1,8 @@
-// src/components/JobSeekerDetails.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlLabel, Grid, Paper, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import useAuthRedirect from '../hooks/useAuthRedirectLogin'; // Import the hook
-
+import useAuthRedirect from '../hooks/useAuthRedirectLogin'; 
 const JobSeekerDetails = () => {
   useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: true });
   const navigate = useNavigate();
@@ -46,7 +44,7 @@ const JobSeekerDetails = () => {
 
       if (response.data.success) {
         alert(response.data.message);
-        navigate('/job-seeker-home'); // Redirect to job seeker home upon successful submission
+        navigate('/job-seeker-home'); 
       } else {
         alert(response.data.message || 'An error occurred while submitting the form.');
       }

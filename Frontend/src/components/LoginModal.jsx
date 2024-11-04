@@ -2,15 +2,14 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import useLogin from '../hooks/useLogin'; // Import the hook
+import useLogin from '../hooks/useLogin'; 
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state for tracking login success
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
-  // Call the hook only when `isLoggedIn` changes to `true`
   useLogin(isLoggedIn);
 
   const handleLogin = async () => {
@@ -29,7 +28,7 @@ const LoginModal = ({ open, onClose }) => {
       console.log('Response from server:', response.data);
 
       if (response.data.success) {
-        setIsLoggedIn(true); // Set login state to true after a successful login
+        setIsLoggedIn(true);
       } else {
         setLoginMessage(response.data.message || 'Login failed');
       }

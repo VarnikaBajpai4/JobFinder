@@ -1,12 +1,9 @@
 <?php
-// Backend/public/download.php
 
 $fileName = $_GET['file'] ?? null;
 $filePath = __DIR__ . '/../uploads/resumes/' . basename($fileName);
 
-// Check if the file exists
 if ($fileName && file_exists($filePath)) {
-    // Set headers to force download
     header('Content-Description: File Transfer');
     header("Access-Control-Allow-Origin: http://localhost:5173");
 

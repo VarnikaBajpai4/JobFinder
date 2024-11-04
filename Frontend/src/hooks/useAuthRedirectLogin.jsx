@@ -1,4 +1,3 @@
-// src/hooks/useAuthRedirect.js
 
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -8,7 +7,7 @@ const useAuthRedirect = ({ requiredRole, redirectCondition = false, active = tru
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!active) return; // Skip redirection logic if `active` is false
+    if (!active) return;
 
     const checkAuthStatus = async () => {
       try {
@@ -22,7 +21,6 @@ const useAuthRedirect = ({ requiredRole, redirectCondition = false, active = tru
         );
 
         if (!authResponse.data.success) {
-          // If not authenticated, redirect to the landing page
           navigate('/');
           return;
         }
@@ -30,7 +28,6 @@ const useAuthRedirect = ({ requiredRole, redirectCondition = false, active = tru
         const userRole = authResponse.data.role;
 
         if (userRole !== requiredRole) {
-          // Redirect to the correct home page based on the user's role
           navigate(userRole === 'job_seeker' ? '/job-seeker-home' : '/employer-home');
           return;
         }

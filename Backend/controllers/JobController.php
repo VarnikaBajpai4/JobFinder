@@ -1,5 +1,4 @@
 <?php
-// controllers/JobController.php
 
 
 require_once __DIR__ . '/../config/database.php';
@@ -28,11 +27,9 @@ class JobController
 
         return ['success' => true, 'data' => $jobListings];
     }
-    // In JobController.php
     public function applyForJob($jobId)
     {
         session_start();
-        //error_log("applyForJob session data after session_start: " . print_r($_SESSION, true));
         error_log("Session ID: " . session_id());
 
         $userId = $_SESSION['user_id'] ?? null;
@@ -44,7 +41,6 @@ class JobController
 
 
         try {
-            // Get the seeker_id for the authenticated user
             $stmt = $this->conn->prepare("SELECT seeker_id FROM job_seekers WHERE user_id = ?");
             $stmt->execute([$userId]);
             $seeker = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,7 +51,6 @@ class JobController
 
             $seekerId = $seeker['seeker_id'];
 
-            // Check if the application already exists
             $stmt = $this->conn->prepare("SELECT * FROM job_applications WHERE job_id = ? AND seeker_id = ?");
             $stmt->execute([$jobId, $seekerId]);
             $existingApplication = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -64,7 +59,6 @@ class JobController
                 return ['success' => false, 'message' => 'You have already applied for this job.'];
             }
 
-            // Insert the application into the job_applications table
             $stmt = $this->conn->prepare("INSERT INTO job_applications (job_id, seeker_id) VALUES (?, ?)");
             $stmt->execute([$jobId, $seekerId]);
 
@@ -108,14 +102,12 @@ class JobController
         error_log("Session ID: " . session_id());
 
 
-        // Check if user is authenticated
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
             return ['success' => false, 'message' => 'User not authenticated.'];
         }
 
         try {
-            // Get the employer_id for the logged-in user
             $stmt = $this->conn->prepare("SELECT employer_id FROM employers WHERE user_id = ?");
             $stmt->execute([$userId]);
             $employer = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -126,7 +118,6 @@ class JobController
 
             $employerId = $employer['employer_id'];
 
-            // Insert job post into job_posts table
             $stmt = $this->conn->prepare("INSERT INTO job_posts (employer_id, job_title, location, min_experience, salary, job_description, employment_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([
                 $employerId,
@@ -156,7 +147,6 @@ class JobController
         }
 
         try {
-            // Get the employer_id based on the logged-in user's ID
             $stmt = $this->conn->prepare("SELECT employer_id FROM employers WHERE user_id = ?");
             $stmt->execute([$userId]);
             $employer = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -167,7 +157,6 @@ class JobController
 
             $employerId = $employer['employer_id'];
 
-            // Fetch job applications for the employer's job posts
             $stmt = $this->conn->prepare("
             SELECT job_applications.application_id, job_applications.application_status, job_applications.applied_at,
                    job_posts.job_title, job_seekers.seeker_id, job_seekers.full_name
@@ -235,7 +224,6 @@ class JobController
         }
 
         try {
-            // Get the seeker_id for the authenticated user
             $stmt = $this->conn->prepare("SELECT seeker_id FROM job_seekers WHERE user_id = ?");
             $stmt->execute([$userId]);
             $seeker = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -246,7 +234,6 @@ class JobController
 
             $seekerId = $seeker['seeker_id'];
 
-            // Fetch job applications for the seeker
             $stmt = $this->conn->prepare("
             SELECT job_applications.application_id, job_applications.application_status, job_applications.applied_at,
                    job_posts.job_id, job_posts.job_title, employers.company_name
@@ -265,7 +252,6 @@ class JobController
             return ['success' => false, 'message' => 'Error fetching applications.'];
         }
     }
-    // controllers/JobController.php
 
     public function getJobDetailsById($jobId)
     {

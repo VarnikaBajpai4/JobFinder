@@ -1,5 +1,4 @@
 <?php
-// app/Router.php
 
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/EmployerController.php';
@@ -41,7 +40,7 @@ class Router
                 return $userController->checkJobSeekerDetails();
             case 'getEmployerJobListings':
                 return $employerController->getEmployerJobListings();
-            case 'addJobListing':  // New case for adding a job listing
+            case 'addJobListing':  
                 return $jobController->addJobListing($_POST);
             case 'getJobDetails':
                 return $jobController->getJobDetails($_POST['job_id']);
@@ -59,13 +58,7 @@ class Router
                 return $jobController->getSeekerApplications();
             case 'getJobDetailsById':
                 $jobId = $_POST['job_id'] ?? null;
-                if ($jobId) {
-                    return $jobController->getJobDetailsById($jobId);
-                } else {
-                    return ['success' => false, 'message' => 'Job ID not provided'];
-                }
-
-
+                return $jobController->getJobDetailsById($jobId);
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }

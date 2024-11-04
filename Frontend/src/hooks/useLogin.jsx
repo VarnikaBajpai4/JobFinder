@@ -6,11 +6,10 @@ const useLogin = (isLoggedIn) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoggedIn) return; // Only run if the user is logged in
+    if (!isLoggedIn) return; 
 
     const checkAuthStatus = async () => {
       try {
-        // Check if the user is logged in
         const formData = new FormData();
         formData.append('action', 'checkAuthStatus');
         
@@ -28,7 +27,6 @@ const useLogin = (isLoggedIn) => {
         const userRole = authResponse.data.role;
 
         if (userRole === 'job_seeker') {
-          // Check if job seeker details are filled
           const seekerDetailsFormData = new FormData();
           seekerDetailsFormData.append('action', 'checkJobSeekerDetails');
           
@@ -44,7 +42,6 @@ const useLogin = (isLoggedIn) => {
             navigate('/job-seeker-details');
           }
         } else if (userRole === 'employer') {
-          // Check if employer details are filled
           const employerDetailsFormData = new FormData();
           employerDetailsFormData.append('action', 'checkEmployerDetails');
           
@@ -66,7 +63,7 @@ const useLogin = (isLoggedIn) => {
     };
 
     checkAuthStatus();
-  }, [isLoggedIn, navigate]); // Add isLoggedIn as a dependency
+  }, [isLoggedIn, navigate]);
 };
 
 export default useLogin;

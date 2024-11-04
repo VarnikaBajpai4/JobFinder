@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Container, Modal, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import useAuthRedirect from '../hooks/useAuthRedirectLogin';
 
 const TrackApplications = () => {
+  useAuthRedirect({ requiredRole: 'employer', redirectCondition: false });
   const [applications, setApplications] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedSeeker, setSelectedSeeker] = useState(null);

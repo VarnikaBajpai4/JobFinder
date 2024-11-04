@@ -3,9 +3,12 @@ import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Container, Moda
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import useAuthRedirect from '../hooks/useAuthRedirectLogin';
 
 
 const SeekerTrack = () => {
+
+    useAuthRedirect({ requiredRole: 'job_seeker', redirectCondition: false });
     const [applications, setApplications] = useState([]);
     const [open, setOpen] = useState(false);
     const [selectedJob, setSelectedJob] = useState(null);

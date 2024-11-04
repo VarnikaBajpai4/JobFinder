@@ -8,9 +8,12 @@ const TrackApplications = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', {
-          action: 'trackApplications'
-        }, { withCredentials: true });
+        const formData = new FormData();
+        formData.append('action', 'trackApplications');
+
+        const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+          withCredentials: true
+        });
 
         if (response.data.success) {
           setApplications(response.data.data);

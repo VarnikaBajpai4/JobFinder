@@ -144,6 +144,7 @@ class JobController
     {
         session_start();
 
+
         $userId = $_SESSION['user_id'] ?? null;
         if (!$userId) {
             return ['success' => false, 'message' => 'User not authenticated.'];
@@ -173,6 +174,8 @@ class JobController
         ");
             $stmt->execute([$employerId]);
             $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Applications: " . print_r($applications, true));
+
 
             return ['success' => true, 'data' => $applications];
         } catch (PDOException $e) {

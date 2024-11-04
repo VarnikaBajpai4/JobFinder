@@ -183,4 +183,23 @@ class JobController
             return ['success' => false, 'message' => 'Error fetching applications.'];
         }
     }
+
+    public function getJobSeekerDetails($seekerId)
+    {
+        try {
+            $stmt = $this->conn->prepare("SELECT full_name, location, skills, resume FROM job_seekers WHERE seeker_id = ?");
+            $stmt->execute([$seekerId]);
+            $seekerDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($seekerDetails) {
+                $seekerDetails['skills'] = json_decode($seekerDetails['skills']); // Decode JSON skills
+                return ['success' => true, 'data' => $seekerDetails];
+            } else {
+                return ['success' => false, 'message' => 'Job seeker not found'];
+            }
+        } catch (PDOException $e) {
+            error_log("Database error in getJobSeekerDetails: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error fetching job seeker details.'];
+        }
+    }
 }

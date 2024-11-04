@@ -49,6 +49,9 @@ class Router
                 return $jobController->applyForJob($_POST['job_id']);
             case 'trackApplications':
                 return $jobController->trackApplications();
+            case 'getJobSeekerDetails':
+                return $jobController->getJobSeekerDetails($_POST['seeker_id']);
+                
                 
 
             default:

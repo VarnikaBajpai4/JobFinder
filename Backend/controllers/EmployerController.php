@@ -42,4 +42,18 @@ class EmployerController {
             $data['companyDescription']
         ]);
     }
+    public function checkEmployerDetails() {
+        session_start();
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            return ['success' => false, 'message' => 'User not authenticated.'];
+        }
+    
+        $stmt = $this->conn->prepare("SELECT employer_id FROM employers WHERE user_id = ?");
+        $stmt->execute([$userId]);
+        $employer = $stmt->fetch();
+    
+        return ['success' => true, 'exists' => $employer !== false];
+    }
+    
 }

@@ -4,21 +4,39 @@ import { Box, Button, TextField, Typography, FormControl, Checkbox, FormControlL
 import useJobSeekerAuthCheck from '../hooks/useJobSeekerAuthCheck';
 import { useNavigate } from 'react-router-dom';
 
+
 const JobSeekerDetails = () => {
   const checkAuth = useJobSeekerAuthCheck();
   const navigate = useNavigate();
 
   useEffect(() => {
     const authenticateUser = async () => {
-      const user = await checkAuth(); 
+      const user = await checkAuth();
       if (!user) {
         console.log('User not authenticated. Redirecting to landing page...');
         navigate('/');
         return;
       }
+
+      // Check if job seeker details already exist
+      const formData = new FormData();
+      formData.append('action', 'checkJobSeekerDetails');
+
+      try {
+        const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+          withCredentials: true,
+        });
+
+        if (response.data.success && response.data.exists) {
+          // Redirect to job seeker home if details already exist
+          navigate('/job-seeker-home', { replace: true });
+        }
+      } catch (error) {
+        console.error('Error checking job seeker details:', error);
+      }
     };
 
-    authenticateUser(); 
+    authenticateUser();
   }, [checkAuth, navigate]);
 
   const [fullName, setFullName] = useState('');
@@ -57,7 +75,7 @@ const JobSeekerDetails = () => {
 
       if (response.data.success) {
         alert(response.data.message);
-        navigate('/home'); // Redirect to homepage upon successful submission
+        navigate('/job-seeker-home'); // Redirect to job seeker home upon successful submission
       } else {
         alert(response.data.message || 'An error occurred while submitting the form.');
       }

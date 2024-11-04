@@ -1,13 +1,18 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import useEmployerRedirect from '../hooks/useEmployerRedirect';
+import useJobSeekerRedirect from '../hooks/useJobSeekerRedirect';
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
+  
+  const checkEmployerDetails = useEmployerRedirect();
+  const checkJobSeekerDetails = useJobSeekerRedirect();
 
   const handleLogin = async () => {
     const formData = new FormData();
@@ -22,15 +27,15 @@ const LoginModal = ({ open, onClose }) => {
         { withCredentials: true }
       );
 
-      console.log('Response from server:', response.data); // Log the server's response
+      console.log('Response from server:', response.data);
 
       if (response.data.success) {
         const userRole = response.data.role;
 
         if (userRole === 'job_seeker') {
-          navigate('/job-seeker-details');
+          checkJobSeekerDetails(); // Redirect based on job seeker details
         } else if (userRole === 'employer') {
-          navigate('/employer-details');
+          checkEmployerDetails(); // Redirect based on employer details
         }
       } else {
         setLoginMessage(response.data.message || 'Login failed');
@@ -63,7 +68,11 @@ const LoginModal = ({ open, onClose }) => {
         <Button variant="contained" onClick={handleLogin} fullWidth sx={{ mt: 2 }}>
           Login
         </Button>
-        {loginMessage && <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>{loginMessage}</Typography>}
+        {loginMessage && (
+          <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+            {loginMessage}
+          </Typography>
+        )}
       </Box>
     </Modal>
   );

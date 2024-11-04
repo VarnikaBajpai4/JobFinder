@@ -14,6 +14,20 @@ class UserController
         $database = new Database();
         $this->conn = $database->connect();
     }
+    public function checkJobSeekerDetails()
+    {
+        session_start();
+        $userId = $_SESSION['user_id'] ?? null;
+        if (!$userId) {
+            return ['success' => false, 'message' => 'User not authenticated.'];
+        }
+
+        $stmt = $this->conn->prepare("SELECT seeker_id FROM job_seekers WHERE user_id = ?");
+        $stmt->execute([$userId]);
+        $jobSeeker = $stmt->fetch();
+
+        return ['success' => true, 'exists' => $jobSeeker !== false];
+    }
 
     public function jobSeekerDetails($data, $files)
     {
@@ -65,9 +79,9 @@ class UserController
     }
 
 
-    
+
     private function handleFileUpload($file, $folder)
-    {   
+    {
         $targetDir = __DIR__ . '/../uploads/' . $folder . '/';
 
 

@@ -3,21 +3,19 @@
 
 require_once __DIR__ . '/../controllers/UserController.php';
 require_once __DIR__ . '/../controllers/EmployerController.php';
+require_once __DIR__ . '/../controllers/JobController.php';
 
-class Router
-{
-    public function handleRequest()
-    {
-        // Access action and other fields directly from $_POST
-        $action = $_POST['action'] ?? ''; // Access action from POST data
+class Router {
+    public function handleRequest() {
+        $action = $_POST['action'] ?? $_GET['action'] ?? ''; // Allow both POST and GET for flexibility
+        $userController = new UserController();
+        $employerController = new EmployerController();
+        $jobController = new JobController();
         error_log("POST data: " . print_r($_POST, true));
         //error_log("FILES data: " . print_r($_FILES, true));
         if($action!=='checkAuthEmployer'){
             error_log("Incoming action: " . print_r($action, true));
         }
-
-        $userController = new UserController();
-        $employerController = new EmployerController();
 
         switch ($action) {
             case 'signup':
@@ -27,15 +25,14 @@ class Router
             case 'logout':
                 return $userController->logout();
             case 'saveEmployerDetails':
-                return $employerController->saveEmployerDetails($_POST, $_FILES);
+                return $employerController->saveEmployerDetails($_POST);
             case 'job_seeker_details':
                 return $userController->jobSeekerDetails($_POST, $_FILES);
             case 'checkAuthJobSeeker':
                 session_start();
                 if (isset($_SESSION['user_id'])) {
-                    // Check if the role is job_seeker
                     if ($_SESSION['role'] === 'job_seeker') {
-                        $response = [
+                        return [
                             'success' => true,
                             'user' => [
                                 'user_id' => $_SESSION['user_id'],
@@ -43,26 +40,16 @@ class Router
                             ],
                         ];
                     } else {
-                        // Role is not job_seeker
-                        $response = [
-                            'success' => true,
-                            'user' => [
-                                'role' =>'a',
-                            ],
-                        ];
+                        return ['success' => true, 'user' => ['role' => 'a']];
                     }
                 } else {
-                    // User ID is not set
-                    $response = ['success' => false];
+                    return ['success' => false];
                 }
-                return $response;
-
             case 'checkAuthEmployer':
                 session_start();
                 if (isset($_SESSION['user_id'])) {
-                    // Check if the role is employer
                     if ($_SESSION['role'] === 'employer') {
-                        $response = [
+                        return [
                             'success' => true,
                             'user' => [
                                 'user_id' => $_SESSION['user_id'],
@@ -70,22 +57,21 @@ class Router
                             ],
                         ];
                     } else {
-                        // Role is not employer
-                        $response = [
-                            'success' => true,
-                            'user' => [
-                                'role' =>'a',
-                            ],
-                        ];
+                        return ['success' => true, 'user' => ['role' => 'a']];
                     }
                 } else {
-                    // User ID is not set
-                    $response = ['success' => false];
+                    return ['success' => false];
                 }
-                return $response;
-
+            case 'getJobListings':
+                return $jobController->getJobListings();
+            case 'checkEmployerDetails':
+                    return $employerController->checkEmployerDetails();
+            case 'checkJobSeekerDetails':
+                    return $userController->checkJobSeekerDetails();
+                
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }
     }
 }
+

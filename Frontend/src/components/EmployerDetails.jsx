@@ -1,33 +1,41 @@
 // src/components/EmployerDetails.jsx
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import useEmployerAuthCheck from '../hooks/useEmployerAuthCheck';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Box, Button, TextField, Typography, Paper, Stack } from '@mui/material';
 
 const EmployerDetails = () => {
-  const checkAuth = useEmployerAuthCheck();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const authenticateUser = async () => {
-      const user = await checkAuth();
-      if (!user) {
-        console.log('User not authenticated. Redirecting to landing page...');
-        return;
+    const checkIfDetailsExist = async () => {
+      const formData = new FormData();
+      formData.append('action', 'checkEmployerDetails');
+
+      try {
+        const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+          withCredentials: true,
+        });
+
+        if (response.data.success && response.data.exists) {
+          // Redirect to employer home if details already exist
+          navigate('/employer-home', { replace: true });
+        }
+      } catch (error) {
+        console.error('Error checking employer details:', error);
       }
     };
 
-    authenticateUser();
-  }, [checkAuth]);
+    checkIfDetailsExist();
+  }, [navigate]);
 
+  // Form handling state and code remains the same
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
   const [companyDescription, setCompanyDescription] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append('action', 'saveEmployerDetails');
     formData.append('companyName', companyName);
@@ -40,11 +48,11 @@ const EmployerDetails = () => {
         withCredentials: true,
       });
 
-      alert(response.data.success ? 'Employer details saved successfully' : 'Failed to save employer details');
-
-      // Redirect to the homepage if submission was successful
       if (response.data.success) {
-        navigate('/home');
+        navigate('/employer-home');
+      } else {
+        console.log('Failed to save employer details:', response.data.message);
+        alert('Failed to save employer details');
       }
     } catch (error) {
       console.error('Error submitting employer details:', error);
@@ -66,14 +74,12 @@ const EmployerDetails = () => {
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
             />
-
             <TextField
               label="Location"
               fullWidth
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
-
             <TextField
               label="Company Description"
               fullWidth
@@ -82,7 +88,6 @@ const EmployerDetails = () => {
               value={companyDescription}
               onChange={(e) => setCompanyDescription(e.target.value)}
             />
-
             <Button variant="contained" type="submit" fullWidth>
               Submit
             </Button>

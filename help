@@ -27,3 +27,25 @@ CREATE TABLE employers (
     company_description TEXT,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE job_posts (
+    job_id INT PRIMARY KEY AUTO_INCREMENT,
+    employer_id INT NOT NULL,
+    job_title VARCHAR(100) NOT NULL,             -- Job Title/Role
+    location VARCHAR(100) NOT NULL,              -- Location
+    min_experience TINYINT UNSIGNED,             -- Minimum Work Experience required
+    salary VARCHAR(50),                          -- Salary (optional; format as text for flexibility)
+    job_description TEXT,                        -- Job Description
+    employment_type ENUM('remote', 'hybrid', 'onsite') NOT NULL,  -- Employment Type
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employer_id) REFERENCES employers(employer_id) ON DELETE CASCADE
+);
+-- Insert sample job posts into the job_posts table
+
+INSERT INTO job_posts (employer_id, job_title, location, min_experience, salary, job_description, employment_type)
+VALUES
+(1, 'Full Stack Developer', 'San Francisco, CA', 3, '$90,000 - $120,000', 'Develop and maintain web applications with a focus on both frontend and backend.', 'hybrid'),
+(1, 'Data Analyst', 'New York, NY', 2, '$70,000 - $90,000', 'Analyze data to provide business insights, and assist in data-driven decision-making.', 'onsite'),
+(1, 'Frontend Developer', 'Austin, TX', 1, '$60,000 - $80,000', 'Create user-friendly web interfaces and collaborate with backend developers.', 'remote'),
+(1, 'Project Manager', 'Chicago, IL', 5, '$100,000 - $130,000', 'Manage project timelines, coordinate teams, and ensure project success.', 'onsite'),
+(1, 'Machine Learning Engineer', 'Seattle, WA', 4, '$110,000 - $140,000', 'Design and implement machine learning models for predictive analytics.', 'remote');

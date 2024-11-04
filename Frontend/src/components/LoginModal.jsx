@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
-import useLogin from '../hooks/useLogin'; 
+import useLogin from '../hooks/useLogin';
 
 const LoginModal = ({ open, onClose }) => {
   const [email, setEmail] = useState('');

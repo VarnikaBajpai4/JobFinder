@@ -265,4 +265,34 @@ class JobController
             return ['success' => false, 'message' => 'Error fetching applications.'];
         }
     }
+    // controllers/JobController.php
+
+    public function getJobDetailsById($jobId)
+    {
+        if (!$jobId) {
+            return ['success' => false, 'message' => 'Job ID is required'];
+        }
+
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT job_posts.job_id, job_posts.job_title, job_posts.location, job_posts.min_experience, 
+                   job_posts.salary, job_posts.job_description, job_posts.employment_type, 
+                   employers.company_name, employers.company_description 
+            FROM job_posts 
+            JOIN employers ON job_posts.employer_id = employers.employer_id 
+            WHERE job_posts.job_id = ?
+        ");
+            $stmt->execute([$jobId]);
+            $jobDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($jobDetails) {
+                return ['success' => true, 'data' => $jobDetails];
+            } else {
+                return ['success' => false, 'message' => 'Job details not found'];
+            }
+        } catch (PDOException $e) {
+            error_log("Database error in getJobDetailsById: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error fetching job details.'];
+        }
+    }
 }

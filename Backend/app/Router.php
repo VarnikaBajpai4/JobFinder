@@ -45,7 +45,6 @@ class Router
                 return $jobController->addJobListing($_POST);
             case 'getJobDetails':
                 return $jobController->getJobDetails($_POST['job_id']);
-
             case 'applyForJob':
                 return $jobController->applyForJob($_POST['job_id']);
             case 'trackApplications':
@@ -58,6 +57,14 @@ class Router
                 return $jobController->updateApplicationStatus($applicationId, $status);
             case 'getSeekerApplications':
                 return $jobController->getSeekerApplications();
+            case 'getJobDetailsById':
+                $jobId = $_POST['job_id'] ?? null;
+                if ($jobId) {
+                    return $jobController->getJobDetailsById($jobId);
+                } else {
+                    return ['success' => false, 'message' => 'Job ID not provided'];
+                }
+
 
             default:
                 return ['success' => false, 'message' => 'Invalid action'];

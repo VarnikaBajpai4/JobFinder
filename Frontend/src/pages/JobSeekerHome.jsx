@@ -56,9 +56,15 @@ const JobSeekerHome = () => {
 
   const handleViewDetails = async (jobId) => {
     try {
-      const response = await axios.get('http://localhost/JobFinder/Backend/public/api.php', {
-        params: { action: 'getJobDetails', job_id: jobId },
+      const formData = new FormData();
+      formData.append('action', 'getJobDetailsById');
+      formData.append('job_id', jobId);
+
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
+
       if (response.data.success) {
         setSelectedJob(response.data.data);
         setModalOpen(true);
@@ -69,6 +75,7 @@ const JobSeekerHome = () => {
       console.error('Error fetching job details:', error);
     }
   };
+
 
   const handleApply = async () => {
     if (!selectedJob) return;
@@ -155,6 +162,9 @@ const JobSeekerHome = () => {
                 <Typography variant="body2" color="text.secondary" gutterBottom>Employment Type: {selectedJob.employment_type}</Typography>
                 <Typography variant="body2" color="text.secondary" gutterBottom>Description: {selectedJob.job_description}</Typography>
                 <Button variant="contained" color="primary" sx={{ mt: 3 }} onClick={handleApply}>Apply Now</Button>
+                <Button variant="contained" color="primary" onClick={handleCloseModal} sx={{ mt: 3 }}>
+                  Close
+                </Button>
               </>
             )}
           </Box>

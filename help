@@ -23,11 +23,7 @@ CREATE TABLE employers (
     employer_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     company_name VARCHAR(100) NOT NULL,
-    job_title VARCHAR(100) NOT NULL,
-    job_description TEXT,
-    location VARCHAR(100),
-    work_arrangement ENUM('onsite', 'remote', 'hybrid') NOT NULL,
-    experience_years TINYINT UNSIGNED,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    location VARCHAR(100) NOT NULL,
+    company_description TEXT,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );

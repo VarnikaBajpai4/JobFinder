@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useEmployerAuthCheck from '../hooks/useEmployerAuthCheck';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
-import { Box, Button, TextField, Typography, FormControl, InputLabel, MenuItem, Select, Paper, Stack } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, TextField, Typography, Paper, Stack } from '@mui/material';
 
 const EmployerDetails = () => {
   const checkAuth = useEmployerAuthCheck();
-  const navigate = useNavigate(); // Initialize useNavigate for redirection
+  const navigate = useNavigate();
 
   useEffect(() => {
     const authenticateUser = async () => {
@@ -22,27 +22,21 @@ const EmployerDetails = () => {
   }, [checkAuth]);
 
   const [companyName, setCompanyName] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
   const [location, setLocation] = useState('');
-  const [workArrangement, setWorkArrangement] = useState('');
-  const [experienceYears, setExperienceYears] = useState('');
+  const [companyDescription, setCompanyDescription] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(); // Use FormData for sending data
+    const formData = new FormData();
     formData.append('action', 'saveEmployerDetails');
     formData.append('companyName', companyName);
-    formData.append('jobTitle', jobTitle);
-    formData.append('jobDescription', jobDescription);
     formData.append('location', location);
-    formData.append('workArrangement', workArrangement);
-    formData.append('experienceYears', experienceYears);
+    formData.append('companyDescription', companyDescription);
 
     try {
       const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }, // Set content type for FormData
+        headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });
 
@@ -50,7 +44,7 @@ const EmployerDetails = () => {
 
       // Redirect to the homepage if submission was successful
       if (response.data.success) {
-        navigate('/home'); // Redirect to the homepage after successful submission
+        navigate('/home');
       }
     } catch (error) {
       console.error('Error submitting employer details:', error);
@@ -74,47 +68,19 @@ const EmployerDetails = () => {
             />
 
             <TextField
-              label="Job Title"
-              fullWidth
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
-            />
-
-            <TextField
-              label="Job Description"
-              fullWidth
-              multiline
-              rows={4}
-              value={jobDescription}
-              onChange={(e) => setJobDescription(e.target.value)}
-            />
-
-            <TextField
               label="Location"
               fullWidth
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
 
-            <FormControl fullWidth>
-              <InputLabel>Work Arrangement</InputLabel>
-              <Select
-                value={workArrangement}
-                onChange={(e) => setWorkArrangement(e.target.value)}
-                label="Work Arrangement"
-              >
-                <MenuItem value="onsite">On-site</MenuItem>
-                <MenuItem value="remote">Remote</MenuItem>
-                <MenuItem value="hybrid">Hybrid</MenuItem>
-              </Select>
-            </FormControl>
-
             <TextField
-              label="Experience Years of Candidate"
+              label="Company Description"
               fullWidth
-              type="number"
-              value={experienceYears}
-              onChange={(e) => setExperienceYears(e.target.value)}
+              multiline
+              rows={4}
+              value={companyDescription}
+              onChange={(e) => setCompanyDescription(e.target.value)}
             />
 
             <Button variant="contained" type="submit" fullWidth>

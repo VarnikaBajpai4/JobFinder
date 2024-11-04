@@ -10,9 +10,11 @@ class Router
     {
         // Access action and other fields directly from $_POST
         $action = $_POST['action'] ?? ''; // Access action from POST data
-        //error_log("POST data: " . print_r($_POST, true));
+        error_log("POST data: " . print_r($_POST, true));
         //error_log("FILES data: " . print_r($_FILES, true));
-        error_log("Incoming action: " . print_r($action, true));
+        if($action!=='checkAuthEmployer'){
+            error_log("Incoming action: " . print_r($action, true));
+        }
 
         $userController = new UserController();
         $employerController = new EmployerController();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Container, Modal, Card, CardContent } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Container, Modal, Card, CardContent, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ const TrackApplications = () => {
         formData.append('action', 'trackApplications');
 
         const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
-          withCredentials: true
+          withCredentials: true,
         });
 
         if (response.data.success) {
@@ -52,11 +52,46 @@ const TrackApplications = () => {
     }
   };
 
-
   const handleClose = () => {
     setOpen(false);
     setSelectedSeeker(null);
   };
+  const handleStatusUpdate = async (applicationId, status) => {
+    try {
+      const formData = new FormData();
+      formData.append('action', 'updateApplicationStatus');
+      formData.append('application_id', applicationId);
+      formData.append('status', status);
+
+      const response = await axios.post('http://localhost/JobFinder/Backend/public/api.php', formData, {
+        withCredentials: true,
+      });
+
+      if (response.data.success) {
+        alert(`Application ${status} successfully.`);
+        setApplications((prevApplications) =>
+          prevApplications.map((app) =>
+            app.application_id === applicationId ? { ...app, application_status: status } : app
+          )
+        );
+      } else {
+        console.error('Failed to update application status:', response.data.message);
+        alert('Failed to update application status');
+      }
+    } catch (error) {
+      console.error('Error updating application status:', error);
+      alert('Error updating application status. Please try again.');
+    }
+  };
+
+  const handleAccept = (applicationId) => {
+    handleStatusUpdate(applicationId, 'accepted');
+  };
+
+  const handleReject = (applicationId) => {
+    handleStatusUpdate(applicationId, 'rejected');
+  };
+
 
   return (
     <Container>
@@ -67,9 +102,15 @@ const TrackApplications = () => {
               JobFinder
             </Typography>
             <Box>
-              <Button color="inherit" component={Link} to="/employer-home" sx={{ fontSize: '0.9rem', mx: 1 }}>Home</Button>
-              <Button color="inherit" component={Link} to="/track-applications" sx={{ fontSize: '0.9rem', mx: 1 }}>Track Applications</Button>
-              <Button color="inherit" component={Link} to="/employer-profile" sx={{ fontSize: '0.9rem', mx: 1 }}>User Profile</Button>
+              <Button color="inherit" component={Link} to="/employer-home" sx={{ fontSize: '0.9rem', mx: 1 }}>
+                Home
+              </Button>
+              <Button color="inherit" component={Link} to="/track-applications" sx={{ fontSize: '0.9rem', mx: 1 }}>
+                Track Applications
+              </Button>
+              <Button color="inherit" component={Link} to="/employer-profile" sx={{ fontSize: '0.9rem', mx: 1 }}>
+                User Profile
+              </Button>
             </Box>
           </Toolbar>
         </AppBar>
@@ -106,26 +147,48 @@ const TrackApplications = () => {
 
         {/* Modal for Job Seeker Details */}
         <Modal open={open} onClose={handleClose}>
-          <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 400, mx: 'auto', mt: '20vh' }}>
+          <Box sx={{ p: 4, backgroundColor: 'white', borderRadius: 2, maxWidth: 600, mx: 'auto', mt: '10vh', boxShadow: 24 }}>
             {selectedSeeker ? (
-              <>
-                <Typography variant="h6">{selectedSeeker.full_name}</Typography>
-                <Typography variant="body2">Location: {selectedSeeker.location}</Typography>
-                <Typography variant="body2">Skills: {selectedSeeker.skills.join(', ')}</Typography>
-                <Typography variant="body2">
-                  Resume:
+              <Stack spacing={2}>
+                <Typography variant="h6" align="center">
+                  Applicant Details
+                </Typography>
+                <Divider />
+                <Typography variant="body1">
+                  <strong>Name:</strong> {selectedSeeker.full_name}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Location:</strong> {selectedSeeker.location}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Skills:</strong> {selectedSeeker.skills.join(', ')}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Resume:</strong>{' '}
                   <a
-                    href={`http://localhost/JobFinder/Backend/uploads/resumes/${selectedSeeker.resume}`}
+                    href={`http://localhost/${selectedSeeker.resume.replace(/^.*JobFinder/, 'JobFinder')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    download
-                    style={{ marginLeft: '5px', color: 'blue', textDecoration: 'underline' }}
+                    style={{ color: 'blue', textDecoration: 'underline' }}
                   >
-                    Download
+                    Download PDF
                   </a>
+
+
                 </Typography>
-                <Button variant="contained" onClick={handleClose} sx={{ mt: 2 }}>Close</Button>
-              </>
+                <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
+                  <Button variant="contained" color="success" onClick={() => handleAccept(selectedSeeker.application_id)}>
+                    Accept
+                  </Button>
+                  <Button variant="contained" color="error" onClick={() => handleReject(selectedSeeker.application_id)}>
+                    Reject
+                  </Button>
+                  <Button variant="contained" onClick={handleClose}>
+                    Close
+                  </Button>
+                </Stack>
+
+              </Stack>
             ) : (
               <Typography variant="body1">Loading...</Typography>
             )}

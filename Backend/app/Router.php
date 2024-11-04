@@ -51,8 +51,10 @@ class Router
                 return $jobController->trackApplications();
             case 'getJobSeekerDetails':
                 return $jobController->getJobSeekerDetails($_POST['seeker_id']);
-                
-                
+            case 'updateApplicationStatus':
+                $applicationId = $_POST['application_id'];
+                $status = $_POST['status'];
+                return $jobController->updateApplicationStatus($applicationId, $status);
 
             default:
                 return ['success' => false, 'message' => 'Invalid action'];

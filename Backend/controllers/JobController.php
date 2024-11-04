@@ -202,4 +202,16 @@ class JobController
             return ['success' => false, 'message' => 'Error fetching job seeker details.'];
         }
     }
+    public function updateApplicationStatus($applicationId, $status)
+    {
+        try {
+            $stmt = $this->conn->prepare("UPDATE job_applications SET application_status = ? WHERE application_id = ?");
+            $stmt->execute([$status, $applicationId]);
+
+            return ['success' => true, 'message' => 'Application status updated successfully.'];
+        } catch (PDOException $e) {
+            error_log("Database error in updateApplicationStatus: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error updating application status.'];
+        }
+    }
 }

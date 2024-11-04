@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Grid, Card, CardContent } from '@mui/material';
 import { Link } from 'react-router-dom';
-import JobListingCard from '../components/JobListingCard';
 import AddJobModal from '../components/AddJobModal';
 import axios from 'axios';
 

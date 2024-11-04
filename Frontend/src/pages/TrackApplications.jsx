@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Container, Modal, Card, CardContent, Divider } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Paper, Stack, Container, Modal, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -31,7 +31,7 @@ const TrackApplications = () => {
     fetchApplications();
   }, []);
 
-  const handleOpen = async (seekerId) => {
+  const handleOpen = async (seekerId, applicationId) => {
     try {
       const formData = new FormData();
       formData.append('action', 'getJobSeekerDetails');
@@ -42,7 +42,7 @@ const TrackApplications = () => {
       });
 
       if (response.data.success) {
-        setSelectedSeeker(response.data.data);
+        setSelectedSeeker({ ...response.data.data, application_id: applicationId });
         setOpen(true);
       } else {
         console.error('Failed to fetch seeker details:', response.data.message);
@@ -56,6 +56,7 @@ const TrackApplications = () => {
     setOpen(false);
     setSelectedSeeker(null);
   };
+
   const handleStatusUpdate = async (applicationId, status) => {
     try {
       const formData = new FormData();
@@ -68,12 +69,12 @@ const TrackApplications = () => {
       });
 
       if (response.data.success) {
-        alert(`Application ${status} successfully.`);
         setApplications((prevApplications) =>
           prevApplications.map((app) =>
             app.application_id === applicationId ? { ...app, application_status: status } : app
           )
         );
+        alert(`Application ${status} successfully.`);
       } else {
         console.error('Failed to update application status:', response.data.message);
         alert('Failed to update application status');
@@ -84,14 +85,13 @@ const TrackApplications = () => {
     }
   };
 
-  const handleAccept = (applicationId) => {
-    handleStatusUpdate(applicationId, 'accepted');
+  const handleAccept = () => {
+    if (selectedSeeker) handleStatusUpdate(selectedSeeker.application_id, 'accepted');
   };
 
-  const handleReject = (applicationId) => {
-    handleStatusUpdate(applicationId, 'rejected');
+  const handleReject = () => {
+    if (selectedSeeker) handleStatusUpdate(selectedSeeker.application_id, 'rejected');
   };
-
 
   return (
     <Container>
@@ -131,13 +131,9 @@ const TrackApplications = () => {
                 <Typography variant="body2">
                   Applicant ID: {application.seeker_id} - {application.full_name}
                 </Typography>
-                <Typography variant="body2">
-                  Status: {application.application_status}
-                </Typography>
-                <Typography variant="body2">
-                  Applied At: {new Date(application.applied_at).toLocaleString()}
-                </Typography>
-                <Button variant="outlined" onClick={() => handleOpen(application.seeker_id)} sx={{ mt: 2 }}>
+                <Typography variant="body2">Status: {application.application_status}</Typography>
+                <Typography variant="body2">Applied At: {new Date(application.applied_at).toLocaleString()}</Typography>
+                <Button variant="outlined" onClick={() => handleOpen(application.seeker_id, application.application_id)} sx={{ mt: 2 }}>
                   Details
                 </Button>
               </Paper>
@@ -173,21 +169,18 @@ const TrackApplications = () => {
                   >
                     Download PDF
                   </a>
-
-
                 </Typography>
                 <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
-                  <Button variant="contained" color="success" onClick={() => handleAccept(selectedSeeker.application_id)}>
+                  <Button variant="contained" color="success" onClick={handleAccept}>
                     Accept
                   </Button>
-                  <Button variant="contained" color="error" onClick={() => handleReject(selectedSeeker.application_id)}>
+                  <Button variant="contained" color="error" onClick={handleReject}>
                     Reject
                   </Button>
                   <Button variant="contained" onClick={handleClose}>
                     Close
                   </Button>
                 </Stack>
-
               </Stack>
             ) : (
               <Typography variant="body1">Loading...</Typography>

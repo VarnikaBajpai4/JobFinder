@@ -14,8 +14,30 @@ const EmployerHome = () => {
     const [jobListings, setJobListings] = useState([]);
     const [showAddJobForm, setShowAddJobForm] = useState(false);
 
+    // Fetch job listings posted by this employer
     useEffect(() => {
-        // Logic to fetch job listings here, if needed
+        const fetchJobListings = async () => {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'getEmployerJobListings');
+                
+                const response = await axios.post(
+                    'http://localhost/JobFinder/Backend/public/api.php',
+                    formData,
+                    { withCredentials: true }
+                );
+
+                if (response.data.success) {
+                    setJobListings(response.data.data);
+                } else {
+                    console.error('Failed to fetch job listings:', response.data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching job listings:', error);
+            }
+        };
+
+        fetchJobListings();
     }, []);
 
     const handleAddJob = () => {
@@ -46,6 +68,18 @@ const EmployerHome = () => {
                     Add Job Listing
                 </Button>
 
+                {jobListings.length === 0 ? (
+                    <Paper elevation={1} sx={{ p: 3, mt: 2, textAlign: 'center', maxWidth: 500 }}>
+                        <Typography variant="h6">No job listings available.</Typography>
+                        <Typography variant="body2">Click "Add Job Listing" to post a new job.</Typography>
+                    </Paper>
+                ) : (
+                    <Stack spacing={2} sx={{ width: '100%', maxWidth: 800 }}>
+                        {jobListings.map((job) => (
+                            <JobListingCard key={job.id} job={job} />
+                        ))}
+                    </Stack>
+                )}
 
                 {showAddJobForm && <AddJobModal onClose={() => setShowAddJobForm(false)} />}
             </Box>

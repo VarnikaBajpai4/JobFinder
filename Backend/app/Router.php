@@ -14,7 +14,7 @@ class Router {
         
         error_log("POST data: " . print_r($_POST, true));
         
-        if($action !== 'checkAuthEmployer'){
+        if ($action !== 'checkAuthEmployer') {
             error_log("Incoming action: " . print_r($action, true));
         }
 
@@ -37,6 +37,8 @@ class Router {
                 return $employerController->checkEmployerDetails();
             case 'checkJobSeekerDetails':
                 return $userController->checkJobSeekerDetails();
+            case 'getEmployerJobListings':  // New case for fetching employer-specific job listings
+                return $employerController->getEmployerJobListings();
             default:
                 return ['success' => false, 'message' => 'Invalid action'];
         }

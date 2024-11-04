@@ -13,7 +13,6 @@ import SeekerTrack from './pages/SeekerTrack';
 
 function App() {
   // Replace with logic to check if the user is an employer or job seeker
-  const isEmployer = false; // Example: Set this based on logged-in user's role
 
   return (
     <Router>
@@ -21,8 +20,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/job-seeker-details" element={<JobSeekerDetails />} />
         <Route path="/employer-details" element={<EmployerDetails />} />
-        <Route path="/job-seeker-home" element={<JobSeekerHome isEmployer={isEmployer} />} />
-        <Route path="/employer-home" element={<EmployerHome isEmployer={isEmployer} />} />
+        <Route path="/job-seeker-home" element={<JobSeekerHome  />} />
+        <Route path="/employer-home" element={<EmployerHome  />} />
         <Route path="/track-applications" element={<TrackApplications />} />
         <Route path="/job-seeker-track" element={<SeekerTrack />} />
 

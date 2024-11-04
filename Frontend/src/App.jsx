@@ -5,6 +5,7 @@ import LandingPage from './components/LandingPage';
 import JobSeekerDetails from './components/JobSeekerDetails';
 import EmployerDetails from './components/EmployerDetails';
 import JobSeekerHome from './pages/JobSeekerHome';
+import EmployerHome from './pages/EmployerHome';
 
 
 function App() {
@@ -18,6 +19,8 @@ function App() {
         <Route path="/job-seeker-details" element={<JobSeekerDetails />} />
         <Route path="/employer-details" element={<EmployerDetails />} />
         <Route path="/job-seeker-home" element={<JobSeekerHome isEmployer={isEmployer} />} />
+        <Route path="/employer-home" element={<EmployerHome isEmployer={isEmployer} />} />
+
       </Routes>
     </Router>
   );
